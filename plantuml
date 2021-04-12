@@ -1,0 +1,33 @@
+@startuml
+class individu{
+
+esprit_critique : float01
+degre_communication : float01
+fakenews : array<fakenews>
+connexions : array<connexion>
+
+void communiquer()
+void mise_a_jour_parametres()
+
+}
+
+individu<|-- emetteur 
+
+class emetteur{
+creer_news()
+}
+
+class connexion{
+intensite : float01
+}
+
+class news{
+veracite : float01
+intensite : float01
+}
+individu --* news
+
+
+individu "0..*" -- "0..*" individu
+(individu, individu) . connexion
+@enduml
