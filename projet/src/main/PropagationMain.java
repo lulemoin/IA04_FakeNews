@@ -7,7 +7,7 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 
-public class MachineMain {
+public class PropagationMain {
 
 	/**
 	 * @param args
@@ -27,18 +27,18 @@ public class MachineMain {
 			 * platformID - is the symbolic name of the platform, isMain : boolean
 			 */
 
-			p = new ProfileImpl(null, -1, "tdia04", false);
+			p = new ProfileImpl(null, -1, "simulation_news", false);
 
 			cc = rt.createAgentContainer(p);
-
-			AgentController ac = cc.createNewAgent("Machine", "td3.agents.MachineAgent", null);
-			ac.start();
-			ac = cc.createNewAgent("Client1", "td3.agents.ClientAgent", null);
-			ac.start();
-			ac = cc.createNewAgent("Client2", "td3.agents.ClientAgent", null);
-			ac.start();
-			ac = cc.createNewAgent("Client3", "td3.agents.ClientAgent", null);
-			ac.start();
+//
+//			AgentController ac = cc.createNewAgent("Machine", "td3.agents.MachineAgent", null);
+//			ac.start();
+//			ac = cc.createNewAgent("Client1", "td3.agents.ClientAgent", null);
+//			ac.start();
+//			ac = cc.createNewAgent("Client2", "td3.agents.ClientAgent", null);
+//			ac.start();
+//			ac = cc.createNewAgent("Client3", "td3.agents.ClientAgent", null);
+//			ac.start();
 		} 
 		catch (Exception ex) {
 			ex.printStackTrace();

@@ -16,8 +16,6 @@ public class MainBoot {
 	}
 
 	public static void boot_gui() {
-		// open main console gui
-		// properties: main=true; gui = true;
 		Runtime rt = Runtime.instance();
 		Profile p = null;
 		try {
