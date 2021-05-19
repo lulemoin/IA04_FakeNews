@@ -30,10 +30,10 @@ public class PropagationMain {
 			p = new ProfileImpl(null, -1, "simulation_news", false);
 
 			cc = rt.createAgentContainer(p);
-//
-//			AgentController ac = cc.createNewAgent("Machine", "td3.agents.MachineAgent", null);
-//			ac.start();
-//			ac = cc.createNewAgent("Client1", "td3.agents.ClientAgent", null);
+
+			AgentController ac = cc.createNewAgent("DemandeurAgent", "projet.agents.DemandeurAgent", null);
+			ac.start();
+//     		ac = cc.createNewAgent("Client1", "td3.agents.ClientAgent", null);
 //			ac.start();
 //			ac = cc.createNewAgent("Client2", "td3.agents.ClientAgent", null);
 //			ac.start();
