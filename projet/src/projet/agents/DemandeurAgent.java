@@ -28,6 +28,7 @@ public class DemandeurAgent extends Agent {
 	public List<AID> IndividuAgents = new ArrayList<AID>();
 	static DemandeurAgent instance;
 	public int done = 0;
+	public AID news;
 
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
@@ -81,6 +82,8 @@ public class DemandeurAgent extends Agent {
 				addBehaviour(new SelectIdReceiver());
 			}	
 			
+			// notification quand la news est finie ou garder une référence dessus
+			
 		}
 
 		public boolean done() {
@@ -101,6 +104,7 @@ public class DemandeurAgent extends Agent {
 			AID idReceiver = IndividuAgents.get(idx);
 			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
 			demande.addReceiver(idReceiver);
+			//mettre le content en json pour intensité et véracités
 			myAgent.addBehaviour(new Send(myAgent, demande));
 		
 		}
@@ -114,6 +118,7 @@ public class DemandeurAgent extends Agent {
 		
 		private void HandleInform() {
 			done = 1;
+			//news = ??
 		}
 		
 		private void HandleRefuse() {
