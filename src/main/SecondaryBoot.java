@@ -40,6 +40,9 @@ public class SecondaryBoot {
 						new Object [] {0.5, 0.5, connexions});
 				ac.start();
 			}
+
+			ac = cc.createNewAgent("Demandeur", "Agents.DemandeurAgent", null);
+			ac.start();
 		} 
 		catch (Exception ex) {
 			ex.printStackTrace();
