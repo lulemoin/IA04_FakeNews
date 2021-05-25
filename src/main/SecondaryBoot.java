@@ -38,7 +38,7 @@ public class SecondaryBoot {
 			
 			for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
 				
-				ac = cc.createNewAgent("Individu", "Agents.IndividuAgent", null);
+				ac = cc.createNewAgent("Individu"+ i, "Agents.IndividuAgent", null);
 				ac.start();
 			}
 

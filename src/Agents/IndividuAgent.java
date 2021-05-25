@@ -17,11 +17,15 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import java.util.Random;
+import model.Constants;
+
+
 import model.News;
 
 public class IndividuAgent extends Agent{
-	double esprit_critique ;
-	double degre_communication ;
+	double esprit_critique = -1;
+	double degre_communication = -1;
 	List<News> news = new ArrayList();
 	boolean connexions_set = false;
 	
@@ -33,10 +37,26 @@ public class IndividuAgent extends Agent{
 		System.out.println(getLocalName() + "--> Installed");
 		
 		//r√©cup√©ration des objets pass√©s en param√®tres
-		Object[] args = getArguments();
-		this.esprit_critique = (double)args[0];
-		this.degre_communication = (double)args[1];
-		this.connexions = (HashMap<AID, Double>)args[2];
+		//TO-DO : a suppr
+		//Object[] args = getArguments();
+		//this.esprit_critique = (double)args[0];
+		//this.degre_communication = (double)args[1];
+		//this.connexions = (HashMap<AID, Double>)args[2];
+		//this.connexions = (HashMap<String, Double>)args[2];
+		
+		// Initialisation des paramËtres suivant une loi normale
+		
+		//TO-DO : ‡ couper-coller dans la fonction setup_connexions (qui sera executÈ quand tous les agents seront intialisÈs)
+		Random r = new Random();
+		
+		int nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
+		
+		
+		while (esprit_critique <0 && esprit_critique >0)
+			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
+		
+		while (degre_communication <0 && degre_communication >0)
+			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
 		
 		addBehaviour(new subscriptionBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
