@@ -38,18 +38,17 @@ public class IndividuAgent extends Agent{
 		
 		//récupération des objets passés en paramètres
 		//TO-DO : a suppr
-<<<<<<< HEAD
 		//Object[] args = getArguments();
 		//this.esprit_critique = (double)args[0];
 		//this.degre_communication = (double)args[1];
 		//this.connexions = (HashMap<AID, Double>)args[2];
 		//this.connexions = (HashMap<String, Double>)args[2];
-=======
-		Object[] args = getArguments();
-		this.esprit_critique = (double)args[0];
-		this.degre_communication = (double)args[1];
-		this.connexions = (HashMap<String, Double>)args[2];
->>>>>>> c8355550d9cd2e98a70a36102b45518408f156f4
+
+//		Object[] args = getArguments();
+//		this.esprit_critique = (double)args[0];
+//		this.degre_communication = (double)args[1];
+//		this.connexions = (HashMap<String, Double>)args[2];
+
 		
 		// Initialisation des param�tres suivant une loi normale
 		
@@ -57,8 +56,7 @@ public class IndividuAgent extends Agent{
 		Random r = new Random();
 		
 		int nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
-<<<<<<< HEAD
-=======
+
 		
 		
 		while (esprit_critique <0 && esprit_critique >0)
@@ -66,7 +64,6 @@ public class IndividuAgent extends Agent{
 		
 		while (degre_communication <0 && degre_communication >0)
 			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
->>>>>>> c8355550d9cd2e98a70a36102b45518408f156f4
 		
 		
 		while (esprit_critique <0 && esprit_critique >0)
