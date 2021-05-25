@@ -6,6 +6,7 @@ public class News {
 	String emetteurInitial;  
 
 	public News() {
+		
 	}
 	
 	public News(float v, float i, String e) {

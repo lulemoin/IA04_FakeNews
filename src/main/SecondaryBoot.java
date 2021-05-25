@@ -1,6 +1,7 @@
 package main;
 
 
+import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -31,13 +32,13 @@ public class SecondaryBoot {
 			cc = rt.createAgentContainer(p);
 			AgentController ac;
 			
-			HashMap<String, Double> connexions = new HashMap<String, Double>(); 
+			//HashMap<AID, Double> connexions = new HashMap<AID, Double>(); 
+						
+
 			
 			for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
-				connexions.put("Individu2", 0.50);
-				connexions.put("Individus3", 0.60);
-				ac = cc.createNewAgent("Individu", "Agents.IndividuAgent", 
-						new Object [] {0.5, 0.5, connexions});
+				
+				ac = cc.createNewAgent("Individu", "Agents.IndividuAgent", null);
 				ac.start();
 			}
 

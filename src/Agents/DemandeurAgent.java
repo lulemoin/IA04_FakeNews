@@ -33,7 +33,12 @@ public class DemandeurAgent extends Agent {
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		addBehaviour(new WaitSubscriptions());
-		addBehaviour(new Manager());
+		SequentialBehaviour sequence = new SequentialBehaviour();
+		
+		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus à passer
+		sequence.addSubBehaviour(new SelectIdReceiver());
+		
+		addBehaviour(sequence);
 	}
 	
 	
@@ -46,9 +51,11 @@ public class DemandeurAgent extends Agent {
 		return instance;
 	}
 	
+	
+	
 		
 	//Behaviour d'attente des souscriptions des individus
-	private class WaitSubscriptions extends CyclicBehaviour {
+	private class WaitSubscriptions extends Behaviour {
 
 		public void action() {
 			//le behaviour attend des messages subscribe
@@ -63,38 +70,22 @@ public class DemandeurAgent extends Agent {
 				}
 				//sinon on répond par un message failure
 				else {
-					ACLMessage reply= message.createReply();
-					reply.setPerformative(ACLMessage.FAILURE);
-					send(reply);
+					System.out.printf(message.getSender()+ "déjà dans la liste");
+//					ACLMessage reply= message.createReply();
+//					reply.setPerformative(ACLMessage.FAILURE);
+//					send(reply);
 				}
 			} else
 				block();
 		}
-	}
-	
-	
-//doit avoir un oeil sur les fakes news en cours
-	// des qu'une fake news est finie, il en renvoie une nouvelle ?
-	private class Manager extends Behaviour {
-
-		public void action() {
-			if(IndividuAgents.size()!=0) {
-				addBehaviour(new SelectIdReceiver());
-			}	
-			
-			// notification quand la news est finie ou garder une référence dessus
-			
-		}
 
 		public boolean done() {
-			return false;
+			return (IndividuAgents.size() == Constants.NOMBRE_INDIVIDUS);
 		}
-		
+
+
 	}
 	
-	//quel est le tick ?
-	// envoyer des messages uniquement quand la liste n'est pas vide
-		
 	
 	private class SelectIdReceiver extends OneShotBehaviour {
 
@@ -104,17 +95,16 @@ public class DemandeurAgent extends Agent {
 			AID idReceiver = IndividuAgents.get(idx);
 			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
 			demande.addReceiver(idReceiver);
-			//mettre le content en json pour intensité et véracités
 			myAgent.addBehaviour(new Send(myAgent, demande));
-		
 		}
 	}
-	
+	// voir sélectionner spécifique ID receiver
 	private class Send extends AchieveREInitiator {
 
 		public Send(Agent a, ACLMessage msg) {
 			super(a, msg);
 		}
+		
 		
 		private void HandleInform() {
 			done = 1;
@@ -125,7 +115,34 @@ public class DemandeurAgent extends Agent {
 			myAgent.addBehaviour(new SelectIdReceiver());
 		}
 	}
+	
+	
 }
+	
+	
+	
+	
+////doit avoir un oeil sur les fakes news en cours
+//	// des qu'une fake news est finie, il en renvoie une nouvelle ?
+//	private class Manager extends Behaviour {
+//
+//		public void action() {
+//			if(IndividuAgents.size()!=0) {
+//				addBehaviour(new SelectIdReceiver());
+//			}	
+//			
+//			// notification quand la news est finie ou garder une référence dessus
+//			
+//		}
+//
+//		public boolean done() {
+//			return false;
+//		}
+//		
+//	}
+//	
+//	//quel est le tick ?
+//	// envoyer des messages uniquement quand la liste n'est pas vide
 
 
 	
