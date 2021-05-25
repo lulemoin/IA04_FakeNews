@@ -29,9 +29,7 @@ public class IndividuAgent extends Agent{
 	List<News> news = new ArrayList();
 	boolean connexions_set = false;
 	
-	/* SOIT ON FAIT UNE CLASSE CONNEXION AVEC aid1, aid2 et intensite de la co SOIT DIRECTEMENT DANS UNE LISTE DANS INDIVIDU AGENT */
 	HashMap<AID, Double> connexions = new HashMap<AID, Double>();
-	
 	
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
@@ -56,21 +54,12 @@ public class IndividuAgent extends Agent{
 		Random r = new Random();
 		
 		int nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
-
 		
-		
-		while (esprit_critique <0 && esprit_critique >0)
+		while (esprit_critique < 0 && esprit_critique > 1)
 			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
 		
-		while (degre_communication <0 && degre_communication >0)
-			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
-		
-		
-		while (esprit_critique <0 && esprit_critique >0)
-			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
-		
-		while (degre_communication <0 && degre_communication >0)
-			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
+		while (degre_communication < 0 && degre_communication > 1)
+			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;	
 		
 		addBehaviour(new subscriptionBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());

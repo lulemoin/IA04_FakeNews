@@ -12,4 +12,7 @@ public class Constants {
 	
 	public static double MOYENNE_DEGRE_COMMUNICATION = 0.7;
 	public static double ECART_TYPE_DEGRE_COMMUNICATION = 0.5;
+	
+	public static double MOYENNE_INTENSITE_CONNEXION = 0.7;
+	public static double ECART_TYPE_INTENSITE_CONNEXION = 0.5;
 }
