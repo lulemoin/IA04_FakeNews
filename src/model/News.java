@@ -6,33 +6,43 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class News {
-	public float veracite;
-	public float intensite;
+	public double veracite;
+	public double intensite;
 	public String emetteurInitial;  
+	public int n_partage;
 
 	public News() {
 		
 	}
 	
-	public News(float v, float i, String e) {
+	public News(double v, double i, String e) {
 		this.veracite = v;
 		this.intensite = i;
 		this.emetteurInitial = e;
+		this.n_partage=0;
 	}
-
-	public float getVeracite() {
+	
+	public int getNpartage() {
+		return n_partage;
+	}
+	
+	public void incrementeNpartage() {
+		this.n_partage+=1;
+	}
+	
+	public double getVeracite() {
 		return veracite;
 	}
 
-	public void setVeracite(float veracite) {
+	public void setVeracite(double veracite) {
 		this.veracite = veracite;
 	}
 
-	public float getIntensite() {
+	public double getIntensite() {
 		return intensite;
 	}
 
-	public void setIntensite(float intensite) {
+	public void setIntensite(double intensite) {
 		this.intensite = intensite;
 	}
 	

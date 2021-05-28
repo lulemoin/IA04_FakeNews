@@ -16,7 +16,6 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-
 import java.util.Random;
 import model.Constants;
 import model.News;
@@ -32,7 +31,7 @@ public class IndividuAgent extends Agent{
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		
-		//rÃ©cupÃ©ration des objets passÃ©s en paramÃ¨tres
+		//récupération des objets passés en parametres
 		//TO-DO : a suppr
 		//Object[] args = getArguments();
 		//this.esprit_critique = (double)args[0];
@@ -107,7 +106,7 @@ public class IndividuAgent extends Agent{
 			if (message != null) {
 				// Créer la news et la partage à ses connexions sous la forme d'un message de type PROPAGATE
 				
-				addBehaviour(new DecisionBehaviour())
+				addBehaviour(new DecisionBehaviour(myAgent, message));
 			} else
 				block();
 		}
@@ -123,26 +122,43 @@ public class IndividuAgent extends Agent{
 		}
 		
 		public void action() {
-			News news=News.read(message.getContent());
-			float decision;
+			News news_transmettre=News.read(message.getContent());
+			double croire;
+			double partage;
 			
 			/*
-			V,I,Ec,Dc,Ic  app [0;1]
-					F(V, I, np,Ec,Dc,Ic)=coeff *I * coeff(V^2)* coeff(1/Ec)* Dc *Ic* coeff*np
+			Vr,In,Ec,Dc,Ic  app [0;1]
+					F(Vr, In, np,Ec,Dc,Ic)=coeff *In * coeff(Vr^2)* coeff(1/Ec)* Dc *Ic* coeff*np
 					ou fonction 2 parties : 
 					I believe :
-					f(V,I,Ec)=(coeff *I * coeff(V^2)* coeff(1/Ec))^i
+					f(V,I,Ec)=(coeff *In * coeff(Vr^2)* coeff(1/Ec))^i
 					I share :
 					G(f,np,Dc,Ic)=np/10^i * coeff *Dc* 1[Ic>0,8 et Dc> ?]
 			*/
-			news.veracite
-			news.intensite
-			news.emetteurInitial
-			esprit_critique
-			degre_communication
+			double Vr=news_transmettre.getVeracite();
+			double In=news_transmettre.getIntensite();
+			int Np=news_transmettre.getNpartage();
 			
-		
-			if(decision>0.5) {
+			System.out.println(esprit_critique + degre_communication + "\n");
+			
+			croire=In * Vr*Vr * (1/esprit_critique);
+			/* 
+			 * AJOUTER Intensité connexion Ic : recupérer le Double du HashMap
+			 * */
+			
+			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;
+			if(partage>0.5) {
+				news.add(news_transmettre);
+				news_transmettre.incrementeNpartage();
+				
+				for (AID id : connexions.keySet()) {
+					ACLMessage newsTransmise = new ACLMessage(ACLMessage.INFORM);
+					newsTransmise.addReceiver(id);
+					newsTransmise.setContent(message.getContent());
+					// newsTransmise.setContent(news.toJSON());
+					send(newsTransmise);
+				}
+
 				
 				
 			}

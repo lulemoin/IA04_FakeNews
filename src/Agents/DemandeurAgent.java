@@ -86,7 +86,6 @@ public class DemandeurAgent extends Agent {
 
 	}
 	
-	
 	private class SelectIdReceiver extends OneShotBehaviour {
 
 		public void action() {
