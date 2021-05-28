@@ -80,7 +80,7 @@ public class IndividuAgent extends Agent{
 		}
 	}
 	
-	/* Behaviour qui attend les requêtes de news de l'agent Environnement */
+	/* Behaviour qui attend les requetes de news de l'agent Environnement */
 	public class WaitforRequestBehaviour extends CyclicBehaviour {
 		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 		
