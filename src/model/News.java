@@ -1,9 +1,14 @@
 package model;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 public class News {
-	float veracite;
-	float intensite;
-	String emetteurInitial;  
+	public float veracite;
+	public float intensite;
+	public String emetteurInitial;  
 
 	public News() {
 		
@@ -31,6 +36,27 @@ public class News {
 		this.intensite = intensite;
 	}
 	
+	
+	public String toJSON() {
+		ObjectMapper mapper = new ObjectMapper();
+		String s = "";
+		try {
+			s = mapper.writeValueAsString(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+	public static News read(String jsonString) {
+		ObjectMapper mapper = new ObjectMapper();
+		News p = null;
+		try {
+			p = mapper.readValue(jsonString, News.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
 	
 
 }

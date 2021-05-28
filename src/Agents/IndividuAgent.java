@@ -18,11 +18,7 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.Random;
-
-import E1.CafeAgent.RechargeBehaviour;
 import model.Constants;
-
-
 import model.News;
 
 public class IndividuAgent extends Agent{
@@ -120,46 +116,37 @@ public class IndividuAgent extends Agent{
 	public class DecisionBehaviour extends OneShotBehaviour {
 		ACLMessage message;
 		
+		
 		public DecisionBehaviour(Agent a, ACLMessage message) {
 			super(a);
 			this.message = message;
 		}
 		
 		public void action() {
-			String contenuMessage = message.getContent();
+			News news=News.read(message.getContent());
+			float decision;
 			
-			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
-			
-			News news=new News(demande)
+			/*
+			V,I,Ec,Dc,Ic  app [0;1]
+					F(V, I, np,Ec,Dc,Ic)=coeff *I * coeff(V^2)* coeff(1/Ec)* Dc *Ic* coeff*np
+					ou fonction 2 parties : 
+					I believe :
+					f(V,I,Ec)=(coeff *I * coeff(V^2)* coeff(1/Ec))^i
+					I share :
+					G(f,np,Dc,Ic)=np/10^i * coeff *Dc* 1[Ic>0,8 et Dc> ?]
+			*/
 			news.veracite
 			news.intensite
 			news.emetteurInitial
 			esprit_critique
 			degre_communication
 			
-			if (DOSE>0) {
-				DOSE--;
-				//affirme
-				ACLMessage reply = message.createReply();
-				reply.setPerformative(ACLMessage.INFORM);
-				reply.setContent(Integer.toString(DOSE));
-				send(reply);
-				//System.out.println("Number of DOSE" + DOSE);
+		
+			if(decision>0.5) {
 				
-				if (DOSE==0) {
-					//refuse
-					Random r = new Random();
-					long delay = r.nextInt(5000) + 500;
-					addBehaviour(new RechargeBehaviour(myAgent, delay));
-					System.out.println("Recharge en cours - effectif dans " + delay + " millisec \n");
-				}
+				
 			}
-			else {
-				ACLMessage reply = message.createReply();
-				reply.setPerformative(ACLMessage.REFUSE);
-				reply.setContent("pas ok ");
-				send(reply);
-			}
+		
 				
 			}
 		
