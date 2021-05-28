@@ -18,6 +18,8 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.Random;
+
+import E1.CafeAgent.RechargeBehaviour;
 import model.Constants;
 
 
@@ -109,11 +111,58 @@ public class IndividuAgent extends Agent{
 			if (message != null) {
 				// Créer la news et la partage à ses connexions sous la forme d'un message de type PROPAGATE
 				
-				
-				
+				addBehaviour(new DecisionBehaviour())
 			} else
 				block();
 		}
 	}
+	
+	public class DecisionBehaviour extends OneShotBehaviour {
+		ACLMessage message;
+		
+		public DecisionBehaviour(Agent a, ACLMessage message) {
+			super(a);
+			this.message = message;
+		}
+		
+		public void action() {
+			String contenuMessage = message.getContent();
+			
+			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
+			
+			News news=new News(demande)
+			news.veracite
+			news.intensite
+			news.emetteurInitial
+			esprit_critique
+			degre_communication
+			
+			if (DOSE>0) {
+				DOSE--;
+				//affirme
+				ACLMessage reply = message.createReply();
+				reply.setPerformative(ACLMessage.INFORM);
+				reply.setContent(Integer.toString(DOSE));
+				send(reply);
+				//System.out.println("Number of DOSE" + DOSE);
+				
+				if (DOSE==0) {
+					//refuse
+					Random r = new Random();
+					long delay = r.nextInt(5000) + 500;
+					addBehaviour(new RechargeBehaviour(myAgent, delay));
+					System.out.println("Recharge en cours - effectif dans " + delay + " millisec \n");
+				}
+			}
+			else {
+				ACLMessage reply = message.createReply();
+				reply.setPerformative(ACLMessage.REFUSE);
+				reply.setContent("pas ok ");
+				send(reply);
+			}
+				
+			}
+		
+		}
 	
 }
