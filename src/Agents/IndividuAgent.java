@@ -86,8 +86,21 @@ public class IndividuAgent extends Agent{
 			ACLMessage message = receive(mt);
 			if (message != null) {
 				// Créer la news et la partage à ses connexions sous la forme d'un message de type PROPAGATE
+				// A modifier pour corréler veracité et intensité
+				Random random1 = new Random();
+				double veracite = random1.nextDouble();
+				Random random2 = new Random();
+				double intensite = random2.nextDouble();
+
 				
+				News nvNews=new News(veracite,intensite, myAgent.getName());
 				
+				for (AID id : connexions.keySet()) {
+					ACLMessage newsTransmise = new ACLMessage(ACLMessage.PROPAGATE);
+					newsTransmise.addReceiver(id);
+				    newsTransmise.setContent(nvNews.toJSON());
+					send(newsTransmise);
+				}
 				
 			} else
 				block();
@@ -152,7 +165,7 @@ public class IndividuAgent extends Agent{
 				news_transmettre.incrementeNpartage();
 				
 				for (AID id : connexions.keySet()) {
-					ACLMessage newsTransmise = new ACLMessage(ACLMessage.INFORM);
+					ACLMessage newsTransmise = new ACLMessage(ACLMessage.PROPAGATE);
 					newsTransmise.addReceiver(id);
 					newsTransmise.setContent(message.getContent());
 					// newsTransmise.setContent(news.toJSON());
