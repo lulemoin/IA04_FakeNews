@@ -49,7 +49,7 @@ public class IndividuAgent extends Agent{
 		// Initialisation des paramètres suivant une loi normale
 		
 		//TO-DO : à couper-coller dans la fonction setup_connexions (qui sera executé quand tous les agents seront intialisés)
-		Random r = new Random();
+
 		
 		news_instance = News.getInstance();
 		

@@ -15,6 +15,7 @@ import jade.wrapper.ContainerController;
 import Agents.IndividuAgent;
 
 import model.Constants;
+import model.News;
 
 public class SecondaryBoot {
 
@@ -26,6 +27,20 @@ public class SecondaryBoot {
 	 */
 	public static void main(String[] args) {
 		startWithProfile();
+		
+		// -------------- News singleton creation ---------------		
+		
+		// A modifier pour corréler veracité et intensité
+		
+		Random r = new Random();
+		
+		Random random1 = new Random();
+		double veracite = random1.nextDouble();
+		Random random2 = new Random();
+		double intensite = random2.nextDouble();
+		
+		News news_instance = News.getInstance();
+		
 	}
 
 	public static void startWithProfile() {

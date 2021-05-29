@@ -15,20 +15,7 @@ public class MainBoot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boot_gui();
-		
-		
-		
-		// -------------- News singleton creation ---------------		
-		
-		// A modifier pour corréler veracité et intensité
-		Random random1 = new Random();
-		double veracite = random1.nextDouble();
-		Random random2 = new Random();
-		double intensite = random2.nextDouble();
-		
-		News news_instance = News.getInstance();
-		
+		boot_gui();		
 
 	}
 
