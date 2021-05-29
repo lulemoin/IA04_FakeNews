@@ -25,6 +25,7 @@ public class IndividuAgent extends Agent{
 	double degre_communication = -1;
 	List<News> news = new ArrayList();
 	boolean connexions_set = false;
+	private News news_instance;
 	
 	HashMap<AID, Double> connexions = new HashMap<AID, Double>();
 	
@@ -49,6 +50,8 @@ public class IndividuAgent extends Agent{
 		
 		//TO-DO : à couper-coller dans la fonction setup_connexions (qui sera executé quand tous les agents seront intialisés)
 		Random r = new Random();
+		
+		news_instance = News.getInstance();
 		
 		int nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 		
@@ -85,20 +88,11 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				// Créer la news et la partage à ses connexions sous la forme d'un message de type PROPAGATE
-				// A modifier pour corréler veracité et intensité
-				Random random1 = new Random();
-				double veracite = random1.nextDouble();
-				Random random2 = new Random();
-				double intensite = random2.nextDouble();
-
-				
-				News nvNews=new News(veracite,intensite, myAgent.getName());
 				
 				for (AID id : connexions.keySet()) {
 					ACLMessage newsTransmise = new ACLMessage(ACLMessage.PROPAGATE);
 					newsTransmise.addReceiver(id);
-				    newsTransmise.setContent(nvNews.toJSON());
+				    newsTransmise.setContent(news_instance.toJSON());
 					send(newsTransmise);
 				}
 				
