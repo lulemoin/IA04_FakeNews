@@ -53,28 +53,5 @@ public class News {
 	public void setIntensite(double intensite) {
 		this.intensite = intensite;
 	}
-	
-	
-	public String toJSON() {
-		ObjectMapper mapper = new ObjectMapper();
-		String s = "";
-		try {
-			s = mapper.writeValueAsString(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return s;
-	}
-	public static News read(String jsonString) {
-		ObjectMapper mapper = new ObjectMapper();
-		News p = null;
-		try {
-			p = mapper.readValue(jsonString, News.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return p;
-	}
-	
 
 }
