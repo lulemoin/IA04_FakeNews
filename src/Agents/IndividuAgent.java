@@ -130,6 +130,7 @@ public class IndividuAgent extends Agent{
 		}
 		
 		public void action() {
+			//TODO utiliser l'instance News pour récupérer les bons agryuments
 			News news_transmettre=News.read(message.getContent());
 			double croire;
 			double partage;
