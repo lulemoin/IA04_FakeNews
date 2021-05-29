@@ -34,12 +34,27 @@ public class SecondaryBoot {
 		
 		Random r = new Random();
 		
+		// veracite demandée à l'utilisateur et intensité en découle
 		Random random1 = new Random();
 		double veracite = random1.nextDouble();
 		Random random2 = new Random();
-		double intensite = random2.nextDouble();
+		double intensite;
+		//veracite entre 0,8 et 0,1, l'intensité est entre 0 et 1
+		if (veracite > 0.8) {
+			 intensite = random2.nextInt(100)/100;
+		}
+		// veracite entre 0,4 et 0,8, l'intensité est entre 0,3 et 1
+		else if (veracite > 0.4) {
+			 intensite = 0.3 + random2.nextInt(70)/100;
+		}
+		//veracite entre 0 et 0,4, l'intensité est entre 0,7 et 1
+		else{
+			 intensite = 0.7 + random2.nextInt(30)/100;
+		}
 		
 		News news_instance = News.getInstance();
+		news_instance.setVeracite(veracite);
+		news_instance.setIntensite(intensite);
 		
 	}
 
