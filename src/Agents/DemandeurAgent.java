@@ -26,13 +26,13 @@ import java.lang.Math.*;
 public class DemandeurAgent extends Agent {
 	
 	public List<AID> IndividuAgents = new ArrayList<AID>();
-	static DemandeurAgent instance;
+	//static DemandeurAgent instance;
 	public int done = 0;
 	public AID news;
 
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
-		addBehaviour(new WaitSubscriptions());
+		//addBehaviour(new WaitSubscriptions());
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
 		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus à passer
@@ -44,13 +44,13 @@ public class DemandeurAgent extends Agent {
 	
 	//mise en place du design pattern singleton
 	//possibilité de faire en fait plusieurs instances ? Aurait-ce un intérêt ?
-	public static DemandeurAgent getInstance() {
-		if(instance == null) {
-			instance = new DemandeurAgent();
-		}
-		return instance;
-	}
-	
+//	public static DemandeurAgent getInstance() {
+//		if(instance == null) {
+//			instance = new DemandeurAgent();
+//		}
+//		return instance;
+//	}
+//	
 	
 	
 		
@@ -64,16 +64,14 @@ public class DemandeurAgent extends Agent {
 			
 			// si un message est reçu, on ajoute l'aid du sender
 			if (message != null) {
-				if (IndividuAgents.contains(message.getSender())) {
+				System.out.printf("demande recue \n");
+				if (!IndividuAgents.contains(message.getSender())) {
 					IndividuAgents.add(message.getSender());
-					System.out.printf(message.getSender()+ "ajouté à la liste");
+					System.out.printf(message.getSender()+ "ajouté à la liste \n");
 				}
 				//sinon on répond par un message failure
 				else {
 					System.out.printf(message.getSender()+ "déjà dans la liste");
-//					ACLMessage reply= message.createReply();
-//					reply.setPerformative(ACLMessage.FAILURE);
-//					send(reply);
 				}
 			} else
 				block();

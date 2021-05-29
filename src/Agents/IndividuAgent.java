@@ -27,6 +27,7 @@ public class IndividuAgent extends Agent{
 	boolean connexions_set = false;
 	private News news_instance;
 	
+	//Double c'est l'intensite de la connexion
 	HashMap<AID, Double> connexions = new HashMap<AID, Double>();
 	
 	protected void setup() {
@@ -50,18 +51,6 @@ public class IndividuAgent extends Agent{
 		
 		//TO-DO : à couper-coller dans la fonction setup_connexions (qui sera executé quand tous les agents seront intialisés)
 
-		Random r = new Random();
-		
-		news_instance = News.getInstance();
-		
-		int nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
-		
-		while (esprit_critique < 0 && esprit_critique > 1)
-			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
-		
-		while (degre_communication < 0 && degre_communication > 1)
-			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;	
-		
 		addBehaviour(new subscriptionBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
 		addBehaviour(new WaitforNewsFromConnexions());
@@ -69,15 +58,16 @@ public class IndividuAgent extends Agent{
 	
 	public class subscriptionBehaviour extends Behaviour {
 		public void action() {
-			if(connexions_set) {
+			if(true) {//if connexions_set quand ce sera fait
 				ACLMessage sub = new ACLMessage(ACLMessage.SUBSCRIBE);
-				sub.addReceiver(DemandeurAgent.getInstance().getAID());
+				sub.addReceiver(new AID(Constants.DEFAULT_DEMANDEUR_AGENT, AID.ISLOCALNAME));
+				System.out.printf("demande d'ajout dans la liste \n");
 				send(sub);
 			}
 		}
 
 		public boolean done() {
-			return connexions_set;
+			return true;
 		}
 	}
 	
@@ -87,14 +77,18 @@ public class IndividuAgent extends Agent{
 		
 		@Override
 		public void action() {
+			
 			ACLMessage message = receive(mt);
+			
 			if (message != null) {
-				
+				News news = News.getInstance();	
+				news.setEmetteurInitial(myAgent.getAID());
+			
 				for (AID id : connexions.keySet()) {
-					ACLMessage newsTransmise = new ACLMessage(ACLMessage.PROPAGATE);
-					newsTransmise.addReceiver(id);
-				    newsTransmise.setContent(news_instance.toJSON());
-					send(newsTransmise);
+					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
+					partage.addReceiver(id);
+					partage.setContent(String.valueOf(connexions.get(id)));
+					send(partage);
 				}
 				
 			} else
@@ -112,7 +106,6 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				// Créer la news et la partage à ses connexions sous la forme d'un message de type PROPAGATE
 				
 				addBehaviour(new DecisionBehaviour(myAgent, message));
 			} else
@@ -130,7 +123,8 @@ public class IndividuAgent extends Agent{
 		}
 		
 		public void action() {
-			News news_transmettre=News.read(message.getContent());
+			
+			News news_transmettre = News.getInstance();
 			double croire;
 			double partage;
 			
@@ -143,28 +137,44 @@ public class IndividuAgent extends Agent{
 					I share :
 					G(f,np,Dc,Ic)=np/10^i * coeff *Dc* 1[Ic>0,8 et Dc> ?]
 			*/
-			double Vr=news_transmettre.getVeracite();
-			double In=news_transmettre.getIntensite();
-			int Np=news_transmettre.getNpartage();
+			double Vr = news_transmettre.getVeracite();
+			double In = news_transmettre.getIntensite();
+			int Np = news_transmettre.getNpartage();
+			int IntConnexion = Integer.parseInt(message.getContent()); 
+			boolean news_proche = connexions.containsKey(news_transmettre.getEmetteurInitial());
+			System.out.println("\n News proche ?" + news_proche + "\n");
 			
 			System.out.println(esprit_critique + degre_communication + "\n");
 			
-			croire=In * Vr*Vr * (1/esprit_critique);
+			// a réviser, ce n'est qu'un exemple 
+			// en utilisant la proximité de la news
+			// utiliser le IntConnexion
+			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
+			croire = news_proche? 1.3 * croire : croire;
+			if (croire > 1) {
+				croire = 1;
+			}
 			/* 
 			 * AJOUTER Intensité connexion Ic : recupérer le Double du HashMap
 			 * */
 			
+			if(croire>0.75) {
+				news_transmettre.incrementeNatteints();
+			}
+			
 			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;
 			if(partage>0.5) {
-				news.add(news_transmettre);
+				// nécessaire si plusieurs news simultanément
+				//news.add(news_transmettre);
 				news_transmettre.incrementeNpartage();
 				
 				for (AID id : connexions.keySet()) {
-					ACLMessage newsTransmise = new ACLMessage(ACLMessage.PROPAGATE);
-					newsTransmise.addReceiver(id);
-					newsTransmise.setContent(message.getContent());
+					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
+					propagate.addReceiver(id);
+					//partage.setContent(message.getContent());
+					propagate.setContent(String.valueOf(connexions.get(id)));
 					// newsTransmise.setContent(news.toJSON());
-					send(newsTransmise);
+					send(propagate);
 				}
 
 				

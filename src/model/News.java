@@ -4,12 +4,15 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jade.core.AID;
+
 
 public class News {
-	public double veracite;
-	public double intensite;
-	public String emetteurInitial;  
-	public int n_partage;
+	private double veracite;
+	private double intensite;
+	private AID emetteurInitial;  
+	private int n_partage = 0;
+	private int n_atteints = 0;
 
 	private static final News instance = new News();
 	
@@ -38,6 +41,14 @@ public class News {
 		this.n_partage+=1;
 	}
 	
+	public int getNatteints() {
+		return n_atteints;
+	}
+	
+	public void incrementeNatteints() {
+		this.n_atteints+=1;
+	}
+	
 	public double getVeracite() {
 		return veracite;
 	}
@@ -52,6 +63,14 @@ public class News {
 
 	public void setIntensite(double intensite) {
 		this.intensite = intensite;
+	}
+
+	public AID getEmetteurInitial() {
+		return emetteurInitial;
+	}
+
+	public void setEmetteurInitial(AID emetteurInitial) {
+		this.emetteurInitial = emetteurInitial;
 	}
 
 }

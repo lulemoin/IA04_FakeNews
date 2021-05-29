@@ -3,6 +3,8 @@ package model;
 public class Constants {
 	public static String DEFAULT_SIMULATION_AGENT = "Sim";
 	public static Integer NOMBRE_INDIVIDUS = 3;
+
+	public static String DEFAULT_DEMANDEUR_AGENT = "Demandeur";
 	
 	public static int MOYENNE_NB_CONNEXION = 10;
 	public static int ECART_TYPE_NB_CONNEXION = 5;

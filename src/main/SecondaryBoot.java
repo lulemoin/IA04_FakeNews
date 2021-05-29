@@ -30,9 +30,6 @@ public class SecondaryBoot {
 		
 		// -------------- News singleton creation ---------------		
 		
-		// A modifier pour corréler veracité et intensité
-		
-		Random r = new Random();
 		
 		// veracite demandée à l'utilisateur et intensité en découle
 		Random random1 = new Random();
@@ -66,36 +63,38 @@ public class SecondaryBoot {
 			p = new ProfileImpl(SECONDARY_PROPERTIES_FILE);
 			cc = rt.createAgentContainer(p);
 			AgentController ac;
+			
+			ac = cc.createNewAgent("Demandeur", "Agents.DemandeurAgent", null);
+			ac.start();
 
 			// initialisation agents
 			for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
-				ac = cc.createNewAgent("Individu"+ i, "Agents.IndividuAgent", null);
+				String name_agent = "Individu"+ i;
+				ac = cc.createNewAgent(name_agent, "Agents.IndividuAgent", null);
 				ac.start();
-				noms_individus.add("Individu"+ i);
+				noms_individus.add(name_agent);
 			}
 			
 			// initialisation connections
-			for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
-				AID aid = new AID("Individu"+ i, AID.ISLOCALNAME);
-				int nb_connections = -1;
-				Random r = new Random();
-				while (nb_connections < 0)
-					nb_connections = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
-				ArrayList<String> random_individus = new ArrayList<String>();
-				Collections.copy(noms_individus, random_individus);
-				Collections.shuffle(random_individus);
-				for (int j = 0 ; j < nb_connections ; i++) {
-					String nom = random_individus.remove(0);
-					double intensite = -1;
-					while (intensite < 0 && intensite > 1)
-						intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;					
+//			for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
+//				AID aid = new AID("Individu"+ i, AID.ISLOCALNAME);
+//				int nb_connections = -1;
+//				Random r = new Random();
+//				while (nb_connections < 0)
+//					nb_connections = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
+//				ArrayList<String> random_individus = new ArrayList<String>();
+//				Collections.copy(noms_individus, random_individus);
+//				Collections.shuffle(random_individus);
+//				for (int j = 0 ; j < nb_connections ; i++) {
+//					String nom = random_individus.remove(0);
+//					double intensite = -1;
+//					while (intensite < 0 && intensite > 1)
+//						intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;					
 					// TO-DO addConnection()
 					// addConnection(nom, intensite);
-				}
-			}
+//				}
+//			}
 
-			ac = cc.createNewAgent("Demandeur", "Agents.DemandeurAgent", null);
-			ac.start();
 		} 
 		catch (Exception ex) {
 			ex.printStackTrace();
