@@ -50,6 +50,7 @@ public class IndividuAgent extends Agent{
 		
 		//TO-DO : à couper-coller dans la fonction setup_connexions (qui sera executé quand tous les agents seront intialisés)
 
+		Random r = new Random();
 		
 		news_instance = News.getInstance();
 		
