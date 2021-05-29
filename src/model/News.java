@@ -11,16 +11,24 @@ public class News {
 	public String emetteurInitial;  
 	public int n_partage;
 
-	public News() {
-		
+	private static final News instance = new News();
+	
+	private News() {
 	}
 	
+	/*
 	public News(double v, double i, String e) {
 		this.veracite = v;
 		this.intensite = i;
 		this.emetteurInitial = e;
 		this.n_partage=0;
 	}
+	*/
+	
+    public static final News getInstance() 
+    {
+        return instance;
+    }
 	
 	public int getNpartage() {
 		return n_partage;
