@@ -43,6 +43,7 @@ public class IndividuAgent extends Agent{
 		
 		
 		addBehaviour(new subscriptionBehaviour());
+		addBehaviour(new SetupConnexionsBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
 		addBehaviour(new WaitforNewsFromConnexions());
 	}
@@ -59,6 +60,19 @@ public class IndividuAgent extends Agent{
 
 		public boolean done() {
 			return true;
+		}
+	}
+	
+	public class SetupConnexionsBehaviour extends CyclicBehaviour {
+		
+		public void action() {
+//			ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+//			if (msg=!null) {
+//				connexions = (HashMap<AID, Double>) msg.getContentObject();
+//				connexions_set = true;
+//				System.out.print("test");
+//			}
+//			System.out.print(connexions);
 		}
 	}
 	
