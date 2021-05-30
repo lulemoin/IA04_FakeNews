@@ -2,6 +2,7 @@ package Agents;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -22,6 +23,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
 import model.Constants;
+
+import java.io.IOException;
 import java.lang.Math.*;
 
 
@@ -124,29 +127,40 @@ public class DemandeurAgent extends Agent {
 				AID aid = it.next();
 				for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
 					Random r = new Random();
-					int nb_connections = -1;
-					while (nb_connections < 0)
-						nb_connections = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
+					int nb_connexions = -1;
+					while (nb_connexions < 0 && nb_connexions > IndividuAgents.size())
+						nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 					
+					
+					// On crée une liste copie des AID afin d'en récupérer nb_connexions parmi eux
+					// Pb : Collections.copy semble ne pas fonctionner pour les AID...
 					List<AID> RandIndividuAgents = new ArrayList<AID>();
 					Collections.copy(IndividuAgents, RandIndividuAgents);
 					Collections.shuffle(RandIndividuAgents);
-					for (int j = 0 ; j < nb_connections ; i++) {
-						String nom = random_individus.remove(0);
+					HashMap<AID, Double> connexions = new HashMap<AID, Double>();
+					for (int j = 0 ; j < nb_connexions ; i++) {
+						
+						//AID nom = RandIndividuAgents.remove(0);
+						AID nom = IndividuAgents.remove(0);
+						
 						double intensite = -1;
 						while (intensite < 0 && intensite > 1)
-							intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;					
-						// TO-DO addConnection()
-						// addConnection(nom, intensite);
+							intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
+						connexions.put(nom, intensite);
+					}
+					ACLMessage connexions_msg = new ACLMessage(ACLMessage.INFORM);
+					connexions_msg.addReceiver(aid);
+					try {
+						connexions_msg.setContentObject(connexions);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					send(connexions_msg);
+				}
 			}
 		}
 	}
-	
-	
 }
-	
-	
-	
 	
 ////doit avoir un oeil sur les fakes news en cours
 //	// des qu'une fake news est finie, il en renvoie une nouvelle ?
