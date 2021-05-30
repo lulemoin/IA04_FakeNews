@@ -33,24 +33,15 @@ public class IndividuAgent extends Agent{
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		
-		//récupération des objets passés en parametres
-		//TO-DO : a suppr
-		//Object[] args = getArguments();
-		//this.esprit_critique = (double)args[0];
-		//this.degre_communication = (double)args[1];
-		//this.connexions = (HashMap<AID, Double>)args[2];
-		//this.connexions = (HashMap<String, Double>)args[2];
-
-//		Object[] args = getArguments();
-//		this.esprit_critique = (double)args[0];
-//		this.degre_communication = (double)args[1];
-//		this.connexions = (HashMap<String, Double>)args[2];
-
 		
-		// Initialisation des paramètres suivant une loi normale
-		
-		//TO-DO : à couper-coller dans la fonction setup_connexions (qui sera executé quand tous les agents seront intialisés)
+		Random r = new Random();
+		while (esprit_critique <0 && esprit_critique >0)
+			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
 
+		while (degre_communication <0 && degre_communication >0)
+			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
+		
+		
 		addBehaviour(new subscriptionBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
 		addBehaviour(new WaitforNewsFromConnexions());
