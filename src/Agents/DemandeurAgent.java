@@ -1,6 +1,8 @@
 package Agents;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -36,6 +38,7 @@ public class DemandeurAgent extends Agent {
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
 		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus à passer
+		sequence.addSubBehaviour(new SetupIndividus());
 		sequence.addSubBehaviour(new SelectIdReceiver());
 		
 		addBehaviour(sequence);
@@ -110,6 +113,32 @@ public class DemandeurAgent extends Agent {
 		
 		private void HandleRefuse() {
 			myAgent.addBehaviour(new SelectIdReceiver());
+		}
+	}
+	
+	private class SetupIndividus extends OneShotBehaviour {
+
+		public void action() {
+			Iterator<AID> it = IndividuAgents.iterator();
+			while(it.hasNext()){
+				AID aid = it.next();
+				for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
+					Random r = new Random();
+					int nb_connections = -1;
+					while (nb_connections < 0)
+						nb_connections = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
+					
+					List<AID> RandIndividuAgents = new ArrayList<AID>();
+					Collections.copy(IndividuAgents, RandIndividuAgents);
+					Collections.shuffle(RandIndividuAgents);
+					for (int j = 0 ; j < nb_connections ; i++) {
+						String nom = random_individus.remove(0);
+						double intensite = -1;
+						while (intensite < 0 && intensite > 1)
+							intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;					
+						// TO-DO addConnection()
+						// addConnection(nom, intensite);
+			}
 		}
 	}
 	
