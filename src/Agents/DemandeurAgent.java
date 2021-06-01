@@ -131,18 +131,12 @@ public class DemandeurAgent extends Agent {
 					while (nb_connexions < 0 && nb_connexions > IndividuAgents.size())
 						nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 					
-					
-					// On crée une liste copie des AID afin d'en récupérer nb_connexions parmi eux
-					// Pb : Collections.copy semble ne pas fonctionner pour les AID...
-					List<AID> RandIndividuAgents = new ArrayList<AID>();
-					Collections.copy(IndividuAgents, RandIndividuAgents);
+					List<AID> RandIndividuAgents = new ArrayList<AID>(IndividuAgents);
+					//Collections.copy(RandIndividuAgents, IndividuAgents);
 					Collections.shuffle(RandIndividuAgents);
 					HashMap<AID, Double> connexions = new HashMap<AID, Double>();
 					for (int j = 0 ; j < nb_connexions ; i++) {
-						
-						//AID nom = RandIndividuAgents.remove(0);
-						AID nom = IndividuAgents.remove(0);
-						
+						AID nom = RandIndividuAgents.remove(0);
 						double intensite = -1;
 						while (intensite < 0 && intensite > 1)
 							intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
