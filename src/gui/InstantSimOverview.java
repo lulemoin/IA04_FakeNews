@@ -2,20 +2,27 @@ package gui;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import model.Constants;
 
-public class InstantSimOverview {
-	private static int NOMBRE_INDIVIDUS = Constants.NOMBRE_INDIVIDUS;
-	private int NB_Personnes_Croyantes;
-	PropertyChangeSupport changes = new PropertyChangeSupport(this); 
+public class InstantSimOverview {	
+	
+	private List<String> IndividuAgents = new ArrayList<String>();
+	private HashMap<String, HashMap<String, Double>> connexions = new HashMap<String, HashMap<String, Double>>();
+	private HashMap<String, Boolean> believerList = new HashMap<String, Boolean>();
+	
+	PropertyChangeSupport changeIndividuAgents = new PropertyChangeSupport(this);
+	PropertyChangeSupport changeConnexions = new PropertyChangeSupport(this); 
+	PropertyChangeSupport changeBelieverList = new PropertyChangeSupport(this); 
 	
 	// Singleton Pattern Management
 	private static final InstantSimOverview instance = new InstantSimOverview();
 	
 	private InstantSimOverview() {
-		//TODO Delete after testing
-		NB_Personnes_Croyantes = NOMBRE_INDIVIDUS/3;
+		
 	}
 	
     public static final InstantSimOverview getInstance() 
@@ -23,32 +30,64 @@ public class InstantSimOverview {
         return instance;
     }
     
-    public int get_NOMBRE_INDIVIDUS() {
-    	return NOMBRE_INDIVIDUS;
+    //----------------- getters ---------------
+    
+    public List<String> getIndividuAgents() 
+    {
+        return IndividuAgents;
     }
     
-    public int get_NB_Personnes_Croyantes() {
-    	return NB_Personnes_Croyantes;
+    public HashMap<String, Double> getConnexion(String str) 
+    {
+        return connexions.get(str);
     }
     
-    public void set_NB_Personnes_Croyantes(int param) {
-    	NB_Personnes_Croyantes = param;
-    	fire(NB_Personnes_Croyantes);
+    public boolean getBeliever(String str) 
+    {
+        return believerList.get(str);
     }
     
-    public void increment_NB_Personnes_Croyantes() {
-    	NB_Personnes_Croyantes++;
-    	fire(NB_Personnes_Croyantes);
+    //Adding something to an attribute
+    
+    public void addIndividuAgent(String str) {
+    	IndividuAgents.add(str);
+    	fireIndividuAgents(str);
+    }
+    
+    public void addConnexion(String str, HashMap<String, Double> map) {
+    	connexions.put(str, map);
+    	fireIndividuConnexions(str);
+    }
+    
+    public void changeBelieverState(String str, Boolean bool) {
+    	believerList.put(str, bool);
+    	fireIndividuBelieverList(str);
     }
     
     // ------------------- Listener management -------------
     
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) { 
-    	changes.addPropertyChangeListener(propertyName, listener); 
+    public void addPropertyChangeListenerIndividuAgents(String propertyName, PropertyChangeListener listener) { 
+    	changeIndividuAgents.addPropertyChangeListener(propertyName, listener); 
 	}
     
-    private void fire(int val) { 
-    	 changes.firePropertyChange("NB_Personnes_Croyantes_Increased", null, val); 
-    	} 
+    public void addPropertyChangeListenerConnexions(String propertyName, PropertyChangeListener listener) { 
+    	changeConnexions.addPropertyChangeListener(propertyName, listener); 
+	}
+    
+    public void addPropertyChangeListenerBelieverList(String propertyName, PropertyChangeListener listener) { 
+    	changeBelieverList.addPropertyChangeListener(propertyName, listener); 
+	}
+    
+    private void fireIndividuAgents(String val) { 
+    	changeIndividuAgents.firePropertyChange("List_Increased", null, val); 
+	}
+    
+    private void fireIndividuConnexions(String val) { 
+    	changeConnexions.firePropertyChange("List_Increased", null, val); 
+	}
+    
+    private void fireIndividuBelieverList(String val) { 
+    	changeBelieverList.firePropertyChange("List_Increased", null, val); 
+	}
 
 }

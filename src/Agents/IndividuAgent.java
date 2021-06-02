@@ -194,6 +194,9 @@ public class IndividuAgent extends Agent{
 			// a rï¿½viser, ce n'est qu'un exemple 
 			// en utilisant la proximitï¿½ de la news
 			// utiliser le IntConnexion
+			
+			//TODO: avoir un attribut boolean "believer" pour savoir à tout moment si l'agent y croit ou pas.
+			
 			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
 			croire = news_proche? 1.3 * croire : croire;
 			if (croire > 1) {

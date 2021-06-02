@@ -6,6 +6,7 @@ import sim.field.continuous.*;
 import sim.field.network.*;
 
 import model.Constants;
+import Agents.DemandeurAgent;
 
 
 import gui.InstantSimOverview;
