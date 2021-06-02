@@ -43,12 +43,12 @@ public class IndividuAgent extends Agent{
 		
 		Random r = new Random();
 		while (esprit_critique <=0 || esprit_critique >1)
-			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
+			esprit_critique = r.nextGaussian() * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
 
 		while (degre_communication <=0 || degre_communication >1)
-			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
+			degre_communication = r.nextGaussian() * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
 		
-		
+		System.out.println(" individu " + getLocalName() + "  esprit_critique = "  + esprit_critique + " et degre_communication = " + degre_communication);
 		addBehaviour(new subscriptionBehaviour());
 		addBehaviour(new SetupConnexionsBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
@@ -190,7 +190,6 @@ public class IndividuAgent extends Agent{
 			
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 			
-			System.out.println(esprit_critique + degre_communication + "\n");
 			
 			// a r�viser, ce n'est qu'un exemple 
 			// en utilisant la proximit� de la news
@@ -200,6 +199,8 @@ public class IndividuAgent extends Agent{
 			if (croire > 1) {
 				croire = 1;
 			}
+			
+			System.out.println("  INdividu " + getLocalName() +" croire = " + croire);
 			/* 
 			 * AJOUTER Intensit� connexion Ic : recup�rer le Double du HashMap
 			 * */
@@ -209,6 +210,7 @@ public class IndividuAgent extends Agent{
 			}
 			
 			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;
+			System.out.println("  INdividu " + getLocalName() +" partage = " + croire);
 			if(partage>0.5) {
 				// n�cessaire si plusieurs news simultan�ment
 				//news.add(news_transmettre);
