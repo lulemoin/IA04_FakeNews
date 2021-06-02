@@ -23,7 +23,6 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import java.util.Random;
 
-i
 import model.Constants;
 import model.News;
 
@@ -62,9 +61,7 @@ public class IndividuAgent extends Agent{
 			sub.addReceiver(new AID(Constants.DEFAULT_DEMANDEUR_AGENT, AID.ISLOCALNAME));
 			System.out.printf("demande d'ajout dans la liste \n");
 			send(sub);
-			}
 		}
-
 	}
 	
 	public class SetupConnexionsBehaviour extends Behaviour {
