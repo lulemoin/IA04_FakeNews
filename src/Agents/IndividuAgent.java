@@ -8,8 +8,13 @@ import java.util.HashMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import java.lang.Double;
+
 import java.util.Optional;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -63,16 +68,34 @@ public class IndividuAgent extends Agent{
 		}
 	}
 	
-	public class SetupConnexionsBehaviour extends CyclicBehaviour {
+	public class SetupConnexionsBehaviour extends Behaviour {
 		
 		public void action() {
-//			ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-//			if (msg=!null) {
-//				connexions = (HashMap<AID, Double>) msg.getContentObject();
-//				connexions_set = true;
-//				System.out.print("test");
-//			}
-//			System.out.print(connexions);
+			ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+			if (msg != null) {
+				System.out.print("Message : " + msg + "\n");
+				try {
+					//System.out.print(msg.getContentObject() + "\n");
+					HashMap<AID, Double> connexions_string = (HashMap<AID, String>) msg.getContentObject();
+					System.out.print(connexions_string + "\n");
+					for (HashMap.Entry<AID, String> co : connexions_string.entrySet()) {
+						System.out.print("for...\n");
+						//connexions.put(co.getKey(), Double.valueOf(co.getValue()));
+				    }
+				} catch (UnreadableException e) {
+					e.printStackTrace();
+				}
+				connexions_set = true;
+				System.out.print("Connections : " + connexions + "\n");
+			}
+			else {
+				block();
+			}
+		}
+
+		@Override
+		public boolean done() {
+			return connexions_set;
 		}
 	}
 	

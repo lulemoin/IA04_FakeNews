@@ -123,34 +123,34 @@ public class DemandeurAgent extends Agent {
 
 		public void action() {
 			Iterator<AID> it = IndividuAgents.iterator();
-			while(it.hasNext()){
+			while(it.hasNext()) {
 				AID aid = it.next();
-				for (int i = 1 ; i <= Constants.NOMBRE_INDIVIDUS ; i++) {
-					Random r = new Random();
-					int nb_connexions = -1;
-					while (nb_connexions < 0 && nb_connexions > IndividuAgents.size())
-						nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
-					
-					List<AID> RandIndividuAgents = new ArrayList<AID>(IndividuAgents);
-					//Collections.copy(RandIndividuAgents, IndividuAgents);
-					Collections.shuffle(RandIndividuAgents);
-					HashMap<AID, Double> connexions = new HashMap<AID, Double>();
-					for (int j = 0 ; j < nb_connexions ; i++) {
-						AID nom = RandIndividuAgents.remove(0);
-						double intensite = -1;
-						while (intensite < 0 && intensite > 1)
-							intensite = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
-						connexions.put(nom, intensite);
-					}
-					ACLMessage connexions_msg = new ACLMessage(ACLMessage.INFORM);
-					connexions_msg.addReceiver(aid);
-					try {
-						connexions_msg.setContentObject(connexions);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					send(connexions_msg);
+				Random r = new Random();
+				int nb_connexions = -1;
+				while (nb_connexions < 1 || nb_connexions >= Constants.NOMBRE_INDIVIDUS) {
+					nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 				}
+				HashMap<AID, Double> connexions = new HashMap<AID, Double>();
+				List<AID> RandIndividuAgents = new ArrayList<AID>(IndividuAgents);
+				RandIndividuAgents.remove(aid);
+				Collections.shuffle(RandIndividuAgents);
+				
+				for (int j = 0 ; j < nb_connexions ; j++) {
+					AID nom = RandIndividuAgents.remove(0);
+					double intensite = -1;
+					while (intensite <= 0 || intensite > 1)
+						intensite = r.nextGaussian() * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
+					connexions.put(nom, intensite);
+				}
+				
+				ACLMessage connexions_msg = new ACLMessage(ACLMessage.INFORM);
+				connexions_msg.addReceiver(aid);
+				try {
+					connexions_msg.setContentObject(connexions);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				send(connexions_msg);
 			}
 		}
 	}
