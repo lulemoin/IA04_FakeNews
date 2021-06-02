@@ -15,6 +15,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -44,7 +45,7 @@ public class DemandeurAgent extends Agent {
 		
 		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus � passer
 		sequence.addSubBehaviour(new SetupIndividus());
-		sequence.addSubBehaviour(new SelectIdReceiver());
+		sequence.addSubBehaviour(new SelectIdReceiver(this, 1000));
 		
 		addBehaviour(sequence);
 	}
@@ -72,14 +73,12 @@ public class DemandeurAgent extends Agent {
 			
 			// si un message est re�u, on ajoute l'aid du sender
 			if (message != null) {
-				System.out.printf("demande recue \n");
 				if (!IndividuAgents.contains(message.getSender())) {
 					IndividuAgents.add(message.getSender().getLocalName());
-					System.out.printf(message.getSender().getLocalName() + "ajout� � la liste \n");
 				}
 				//sinon on r�pond par un message failure
 				else {
-					System.out.printf(message.getSender()+ "d�j� dans la liste");
+					System.out.printf(message.getSender()+ "deja dans la liste");
 				}
 			} else
 				block();
@@ -88,16 +87,19 @@ public class DemandeurAgent extends Agent {
 		public boolean done() {
 			return (IndividuAgents.size() == Constants.NOMBRE_INDIVIDUS);
 		}
-
-
 	}
 	
-	private class SelectIdReceiver extends OneShotBehaviour {
+	private class SelectIdReceiver extends WakerBehaviour {
 
-		public void action() {
+		public SelectIdReceiver(Agent a, long timeout) {
+			super(a, timeout);
+		}
+
+		public void onWake() {
 		
 			int idx = (int) Math.floor(Math.random()*IndividuAgents.size());
 			String idReceiver = IndividuAgents.get(idx);
+			System.out.println("idx = " + IndividuAgents.get(idx) + " a toi de lancer la news");
 			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
 			demande.addReceiver(new AID(idReceiver, AID.ISLOCALNAME));
 			myAgent.addBehaviour(new Send(myAgent, demande));
@@ -117,7 +119,7 @@ public class DemandeurAgent extends Agent {
 		}
 		
 		private void HandleRefuse() {
-			myAgent.addBehaviour(new SelectIdReceiver());
+			System.out.println("L'individu refuse de traiter la news");
 		}
 	}
 	

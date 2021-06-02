@@ -42,10 +42,10 @@ public class IndividuAgent extends Agent{
 		
 		
 		Random r = new Random();
-		while (esprit_critique <0 && esprit_critique >0)
+		while (esprit_critique <=0 || esprit_critique >1)
 			esprit_critique = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_ESPRIT_CRITIQUE + Constants.MOYENNE_ESPRIT_CRITIQUE;
 
-		while (degre_communication <0 && degre_communication >0)
+		while (degre_communication <=0 || degre_communication >1)
 			degre_communication = Math.round(r.nextGaussian()) * Constants.ECART_TYPE_DEGRE_COMMUNICATION + Constants.MOYENNE_DEGRE_COMMUNICATION;		
 		
 		
@@ -59,7 +59,6 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage sub = new ACLMessage(ACLMessage.SUBSCRIBE);
 			sub.addReceiver(new AID(Constants.DEFAULT_DEMANDEUR_AGENT, AID.ISLOCALNAME));
-			System.out.printf("demande d'ajout dans la liste \n");
 			send(sub);
 		}
 	}
@@ -79,8 +78,8 @@ public class IndividuAgent extends Agent{
 						HashMap<String, Double> connexions_intermediaire = (HashMap<String, Double>) msg.getContentObject();
 						connexions = (HashMap<String, Double>) msg.getContentObject();
 						//connexions_intermediaire = (HashMap<String, String>) msg.getContentObject();
-						System.out.print("connexion inter = " + connexions_intermediaire);
-						System.out.print("connexion = " + connexions);
+						System.out.println("connexion inter = " + connexions_intermediaire);
+						System.out.println("connexion = " + connexions);
 						/*for (String indiv : connexions_intermediaire.keySet()) {
 							System.out.print(connexions_intermediaire.getClass());
 							//Double intens = Double.valueOf(str);
@@ -124,9 +123,14 @@ public class IndividuAgent extends Agent{
 			
 			if (message != null) {
 				News news = News.getInstance();	
-				news.setEmetteurInitial(myAgent.getAID());
-			
+				news.setEmetteurInitial(myAgent.getAID().getLocalName());
+				System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
+				System.out.println("je suis l'individu " + getLocalName());
+				System.out.println("LA NEWS  intensite = " + news.getIntensite() + " natteints = " + news.getNatteints() + " veracite " +  news.getVeracite());
+
+				System.out.println("connexions = " + connexions); 
 				for (String id : connexions.keySet()) {
+					System.out.println("id = " + id); 
 					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
 					partage.addReceiver(new AID(id, AID.ISLOCALNAME));
 					partage.setContent(String.valueOf(connexions.get(id)));
@@ -148,7 +152,7 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				
+				System.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message));
 			} else
 				block();
@@ -183,8 +187,8 @@ public class IndividuAgent extends Agent{
 			double In = news_transmettre.getIntensite();
 			int Np = news_transmettre.getNpartage();
 			Double IntConnexion = Double.valueOf(message.getContent()); 
-			boolean news_proche = connexions.containsKey(news_transmettre.getEmetteurInitial());
-			System.out.println("\n News proche ?" + news_proche + "\n");
+			
+			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 			
 			System.out.println(esprit_critique + degre_communication + "\n");
 			
