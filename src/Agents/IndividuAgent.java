@@ -22,6 +22,8 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import java.util.Random;
+
+i
 import model.Constants;
 import model.News;
 
@@ -33,7 +35,8 @@ public class IndividuAgent extends Agent{
 	private News news_instance;
 	
 	//Double c'est l'intensite de la connexion
-	HashMap<AID, Double> connexions = new HashMap<AID, Double>();
+	HashMap<String, Double> connexions = new HashMap<String, Double>();
+	//List<Connexion> connexions = new ArrayList<Connexion>();
 	
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
@@ -53,19 +56,15 @@ public class IndividuAgent extends Agent{
 		addBehaviour(new WaitforNewsFromConnexions());
 	}
 	
-	public class subscriptionBehaviour extends Behaviour {
+	public class subscriptionBehaviour extends OneShotBehaviour {
 		public void action() {
-			if(true) {//if connexions_set quand ce sera fait
-				ACLMessage sub = new ACLMessage(ACLMessage.SUBSCRIBE);
-				sub.addReceiver(new AID(Constants.DEFAULT_DEMANDEUR_AGENT, AID.ISLOCALNAME));
-				System.out.printf("demande d'ajout dans la liste \n");
-				send(sub);
+			ACLMessage sub = new ACLMessage(ACLMessage.SUBSCRIBE);
+			sub.addReceiver(new AID(Constants.DEFAULT_DEMANDEUR_AGENT, AID.ISLOCALNAME));
+			System.out.printf("demande d'ajout dans la liste \n");
+			send(sub);
 			}
 		}
 
-		public boolean done() {
-			return true;
-		}
 	}
 	
 	public class SetupConnexionsBehaviour extends Behaviour {
@@ -73,20 +72,38 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 			if (msg != null) {
-				System.out.print("Message : " + msg + "\n");
-				try {
+				//System.out.print("Message : " + msg + "\n");
 					//System.out.print(msg.getContentObject() + "\n");
-					HashMap<AID, Double> connexions_string = (HashMap<AID, String>) msg.getContentObject();
-					System.out.print(connexions_string + "\n");
+					//List<AID, Double> connexions = (HashMap<AID, Double>) msg.getContentObject();
+					//String connexions_string = msg.getContent();
+					
+					
+					try {
+						HashMap<String, Double> connexions_intermediaire = (HashMap<String, Double>) msg.getContentObject();
+						connexions = (HashMap<String, Double>) msg.getContentObject();
+						//connexions_intermediaire = (HashMap<String, String>) msg.getContentObject();
+						System.out.print("connexion inter = " + connexions_intermediaire);
+						System.out.print("connexion = " + connexions);
+						/*for (String indiv : connexions_intermediaire.keySet()) {
+							System.out.print(connexions_intermediaire.getClass());
+							//Double intens = Double.valueOf(str);
+							//connexions.put(indiv, intens);
+						}
+						System.out.print(connexions + "\n");*/
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//connexions = HashMap<String, String> connexions_intermediaire;
+					//System.out.print(connexions + "\n");
+					/*System.out.print(connexions_string + "\n");
 					for (HashMap.Entry<AID, String> co : connexions_string.entrySet()) {
 						System.out.print("for...\n");
 						//connexions.put(co.getKey(), Double.valueOf(co.getValue()));
-				    }
-				} catch (UnreadableException e) {
-					e.printStackTrace();
-				}
+				    }*/
 				connexions_set = true;
-				System.out.print("Connections : " + connexions + "\n");
+				//System.out.print("Connections : " + connexions + "\n");
 			}
 			else {
 				block();
@@ -112,9 +129,9 @@ public class IndividuAgent extends Agent{
 				News news = News.getInstance();	
 				news.setEmetteurInitial(myAgent.getAID());
 			
-				for (AID id : connexions.keySet()) {
+				for (String id : connexions.keySet()) {
 					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
-					partage.addReceiver(id);
+					partage.addReceiver(new AID(id, AID.ISLOCALNAME));
 					partage.setContent(String.valueOf(connexions.get(id)));
 					send(partage);
 				}
@@ -168,14 +185,14 @@ public class IndividuAgent extends Agent{
 			double Vr = news_transmettre.getVeracite();
 			double In = news_transmettre.getIntensite();
 			int Np = news_transmettre.getNpartage();
-			int IntConnexion = Integer.parseInt(message.getContent()); 
+			Double IntConnexion = Double.valueOf(message.getContent()); 
 			boolean news_proche = connexions.containsKey(news_transmettre.getEmetteurInitial());
 			System.out.println("\n News proche ?" + news_proche + "\n");
 			
 			System.out.println(esprit_critique + degre_communication + "\n");
 			
-			// a réviser, ce n'est qu'un exemple 
-			// en utilisant la proximité de la news
+			// a rï¿½viser, ce n'est qu'un exemple 
+			// en utilisant la proximitï¿½ de la news
 			// utiliser le IntConnexion
 			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
 			croire = news_proche? 1.3 * croire : croire;
@@ -183,7 +200,7 @@ public class IndividuAgent extends Agent{
 				croire = 1;
 			}
 			/* 
-			 * AJOUTER Intensité connexion Ic : recupérer le Double du HashMap
+			 * AJOUTER Intensitï¿½ connexion Ic : recupï¿½rer le Double du HashMap
 			 * */
 			
 			if(croire>0.75) {
@@ -192,13 +209,13 @@ public class IndividuAgent extends Agent{
 			
 			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;
 			if(partage>0.5) {
-				// nécessaire si plusieurs news simultanément
+				// nï¿½cessaire si plusieurs news simultanï¿½ment
 				//news.add(news_transmettre);
 				news_transmettre.incrementeNpartage();
 				
-				for (AID id : connexions.keySet()) {
+				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
-					propagate.addReceiver(id);
+					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));
 					//partage.setContent(message.getContent());
 					propagate.setContent(String.valueOf(connexions.get(id)));
 					// newsTransmise.setContent(news.toJSON());

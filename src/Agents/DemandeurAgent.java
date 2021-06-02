@@ -22,6 +22,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREInitiator;
+import jade.util.leap.Serializable;
+
 import model.Constants;
 
 import java.io.IOException;
@@ -30,7 +32,7 @@ import java.lang.Math.*;
 
 public class DemandeurAgent extends Agent {
 	
-	public List<AID> IndividuAgents = new ArrayList<AID>();
+	public List<String> IndividuAgents = new ArrayList<String>();
 	//static DemandeurAgent instance;
 	public int done = 0;
 	public AID news;
@@ -40,7 +42,7 @@ public class DemandeurAgent extends Agent {
 		//addBehaviour(new WaitSubscriptions());
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
-		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus à passer
+		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus ï¿½ passer
 		sequence.addSubBehaviour(new SetupIndividus());
 		sequence.addSubBehaviour(new SelectIdReceiver());
 		
@@ -49,7 +51,7 @@ public class DemandeurAgent extends Agent {
 	
 	
 	//mise en place du design pattern singleton
-	//possibilité de faire en fait plusieurs instances ? Aurait-ce un intérêt ?
+	//possibilitï¿½ de faire en fait plusieurs instances ? Aurait-ce un intï¿½rï¿½t ?
 //	public static DemandeurAgent getInstance() {
 //		if(instance == null) {
 //			instance = new DemandeurAgent();
@@ -68,16 +70,16 @@ public class DemandeurAgent extends Agent {
 			MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE);
 			ACLMessage message = receive(mt);
 			
-			// si un message est reçu, on ajoute l'aid du sender
+			// si un message est reï¿½u, on ajoute l'aid du sender
 			if (message != null) {
 				System.out.printf("demande recue \n");
 				if (!IndividuAgents.contains(message.getSender())) {
-					IndividuAgents.add(message.getSender());
-					System.out.printf(message.getSender()+ "ajouté à la liste \n");
+					IndividuAgents.add(message.getSender().getLocalName());
+					System.out.printf(message.getSender().getLocalName() + "ajoutï¿½ ï¿½ la liste \n");
 				}
-				//sinon on répond par un message failure
+				//sinon on rï¿½pond par un message failure
 				else {
-					System.out.printf(message.getSender()+ "déjà dans la liste");
+					System.out.printf(message.getSender()+ "dï¿½jï¿½ dans la liste");
 				}
 			} else
 				block();
@@ -95,13 +97,13 @@ public class DemandeurAgent extends Agent {
 		public void action() {
 		
 			int idx = (int) Math.floor(Math.random()*IndividuAgents.size());
-			AID idReceiver = IndividuAgents.get(idx);
+			String idReceiver = IndividuAgents.get(idx);
 			ACLMessage demande = new ACLMessage(ACLMessage.REQUEST);
-			demande.addReceiver(idReceiver);
+			demande.addReceiver(new AID(idReceiver, AID.ISLOCALNAME));
 			myAgent.addBehaviour(new Send(myAgent, demande));
 		}
 	}
-	// voir sélectionner spécifique ID receiver
+	// voir sï¿½lectionner spï¿½cifique ID receiver
 	private class Send extends AchieveREInitiator {
 
 		public Send(Agent a, ACLMessage msg) {
@@ -122,34 +124,45 @@ public class DemandeurAgent extends Agent {
 	private class SetupIndividus extends OneShotBehaviour {
 
 		public void action() {
-			Iterator<AID> it = IndividuAgents.iterator();
+			Iterator<String> it = IndividuAgents.iterator();
 			while(it.hasNext()) {
-				AID aid = it.next();
+				String aid = it.next();
 				Random r = new Random();
 				int nb_connexions = -1;
 				while (nb_connexions < 1 || nb_connexions >= Constants.NOMBRE_INDIVIDUS) {
 					nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 				}
-				HashMap<AID, Double> connexions = new HashMap<AID, Double>();
-				List<AID> RandIndividuAgents = new ArrayList<AID>(IndividuAgents);
+				//HashMap<AID, Double> connexions = new HashMap<AID, Double>();
+				HashMap<String, Double> connexions = new HashMap<String, Double>();
+				//Connexions connexions = new Connexions();
+				
+				List<String> RandIndividuAgents = new ArrayList<String>(IndividuAgents);
 				RandIndividuAgents.remove(aid);
 				Collections.shuffle(RandIndividuAgents);
 				
 				for (int j = 0 ; j < nb_connexions ; j++) {
-					AID nom = RandIndividuAgents.remove(0);
+					String nom = RandIndividuAgents.remove(0);
 					double intensite = -1;
 					while (intensite <= 0 || intensite > 1)
 						intensite = r.nextGaussian() * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
 					connexions.put(nom, intensite);
 				}
 				
+				/*List<String> connexions_string;
+				connexions.forEach((c) -> {
+					connexions_string.add(c.toJSON());
+				});*/ 
 				ACLMessage connexions_msg = new ACLMessage(ACLMessage.INFORM);
-				connexions_msg.addReceiver(aid);
+				connexions_msg.addReceiver(new AID(aid, AID.ISLOCALNAME));
 				try {
 					connexions_msg.setContentObject(connexions);
+				}catch (NoClassDefFoundError e) {
+					e.printStackTrace();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				send(connexions_msg);
 			}
 		}
@@ -165,7 +178,7 @@ public class DemandeurAgent extends Agent {
 //				addBehaviour(new SelectIdReceiver());
 //			}	
 //			
-//			// notification quand la news est finie ou garder une référence dessus
+//			// notification quand la news est finie ou garder une rï¿½fï¿½rence dessus
 //			
 //		}
 //
