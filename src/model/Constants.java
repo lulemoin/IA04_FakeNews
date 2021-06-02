@@ -2,7 +2,7 @@ package model;
 
 public class Constants {
 	public static String DEFAULT_SIMULATION_AGENT = "Sim";
-	public static Integer NOMBRE_INDIVIDUS = 3;
+	public static Integer NOMBRE_INDIVIDUS = 200;
 
 	public static String DEFAULT_DEMANDEUR_AGENT = "Demandeur";
 	
