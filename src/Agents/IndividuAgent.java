@@ -210,12 +210,12 @@ public class IndividuAgent extends Agent{
 			//si la personne croit a plus de 0,75
 			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();
-				croire=1.3*croire;
-				contamine=true;
+				croire=1.5*croire;
+				//contamine=true;
 			}
 			
 			if (Np>=1) {
-			partage=croire * (Np*Constants.MOYENNE_NB_CONNEXION/Constants.NOMBRE_INDIVIDUS) * degre_communication;
+			partage=3*croire * (10*Np*Constants.MOYENNE_NB_CONNEXION/Constants.NOMBRE_INDIVIDUS) * degre_communication;
 			}
 			else {
 				partage=croire* degre_communication;
@@ -225,7 +225,7 @@ public class IndividuAgent extends Agent{
 			System.out.println(" Individu " + getLocalName() +" partage = " + partage);
 
 			
-			if(partage>0) {
+			if(partage>0.5) {
 				contamine=true;
 				news_transmettre.incrementeNpartage();
 				System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
