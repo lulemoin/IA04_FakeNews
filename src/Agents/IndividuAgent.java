@@ -32,6 +32,7 @@ public class IndividuAgent extends Agent{
 	List<News> news = new ArrayList();
 	boolean connexions_set = false;
 	private News news_instance;
+	boolean contamine=false;
 	
 	//Double c'est l'intensite de la connexion
 	HashMap<String, Double> connexions = new HashMap<String, Double>();
@@ -152,6 +153,9 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
+				if(contamine) {
+					block();
+				}
 				System.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message));
 			} else
@@ -208,8 +212,10 @@ public class IndividuAgent extends Agent{
 			 * AJOUTER Intensit� connexion Ic : recup�rer le Double du HashMap
 			 * */
 			
+			//si la personne croit a plus de 0,75
 			if(croire>0.75) {
 				news_transmettre.incrementeNatteints();
+				contamine=true;
 			}
 			
 			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;

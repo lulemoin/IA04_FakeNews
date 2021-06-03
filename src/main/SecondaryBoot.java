@@ -32,6 +32,7 @@ public class SecondaryBoot {
 		
 		
 		// veracite demandée à l'utilisateur et intensité en découle
+		Random random1 = new Random();
 		double veracite = random1.nextDouble();
 		if (veracite == 0) {
 			veracite = 0.01;

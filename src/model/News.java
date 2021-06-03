@@ -10,7 +10,7 @@ import jade.core.AID;
 public class News {
 	private double veracite;
 	private double intensite;
-	private AID emetteurInitial;  
+	private String emetteurInitial;  
 	private int n_partage = 0;
 	private int n_atteints = 0;
 
@@ -65,11 +65,11 @@ public class News {
 		this.intensite = intensite;
 	}
 
-	public AID getEmetteurInitial() {
+	public String getEmetteurInitial() {
 		return emetteurInitial;
 	}
 
-	public void setEmetteurInitial(AID emetteurInitial) {
+	public void setEmetteurInitial(String emetteurInitial) {
 		this.emetteurInitial = emetteurInitial;
 	}
 
