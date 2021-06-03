@@ -126,7 +126,6 @@ public class IndividuAgent extends Agent{
 				News news = News.getInstance();	
 				news.setEmetteurInitial(myAgent.getAID().getLocalName());
 				System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
-				System.out.println("je suis l'individu " + getLocalName());
 				System.out.println("LA NEWS  intensite = " + news.getIntensite() + " natteints = " + news.getNatteints() + " veracite " +  news.getVeracite());
 
 				System.out.println("connexions = " + connexions); 
@@ -137,6 +136,7 @@ public class IndividuAgent extends Agent{
 					partage.setContent(String.valueOf(connexions.get(id)));
 					send(partage);
 				}
+				contamine=true;
 				
 			} else
 				block();
@@ -153,11 +153,11 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				if(contamine) {
-					block();
-				}
+				System.out.println(contamine);
+				if(!contamine) {	
 				System.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message));
+				}
 			} else
 				block();
 		}
@@ -174,6 +174,7 @@ public class IndividuAgent extends Agent{
 		
 		public void action() {
 			
+			System.out.println("Individu " + getLocalName() + "a recu la news, ses connections :"+ connexions );
 			News news_transmettre = News.getInstance();
 			double croire;
 			double partage;
@@ -194,43 +195,45 @@ public class IndividuAgent extends Agent{
 			
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 			
-			
-			// a rï¿½viser, ce n'est qu'un exemple 
-			// en utilisant la proximitï¿½ de la news
-			// utiliser le IntConnexion
-			
 			//TODO: avoir un attribut boolean "believer" pour savoir à tout moment si l'agent y croit ou pas.
 			
 			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
-			croire = news_proche? 1.3 * croire : croire;
+			croire = news_proche? 2 * croire : croire;
+			
+			/*
 			if (croire > 1) {
 				croire = 1;
-			}
+			}*/
 			
-			System.out.println("  INdividu " + getLocalName() +" croire = " + croire);
-			/* 
-			 * AJOUTER Intensitï¿½ connexion Ic : recupï¿½rer le Double du HashMap
-			 * */
-			
+			System.out.println("  individu " + getLocalName() +" croire = " + croire);
+						
 			//si la personne croit a plus de 0,75
-			if(croire>0.75) {
+			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();
+				croire=1.3*croire;
 				contamine=true;
 			}
 			
-			partage=croire * Np/Constants.NOMBRE_INDIVIDUS * degre_communication;
-			System.out.println("  INdividu " + getLocalName() +" partage = " + croire);
-			if(partage>0.5) {
-				// nï¿½cessaire si plusieurs news simultanï¿½ment
-				//news.add(news_transmettre);
+			if (Np>=1) {
+			partage=croire * (Np*Constants.MOYENNE_NB_CONNEXION/Constants.NOMBRE_INDIVIDUS) * degre_communication;
+			}
+			else {
+				partage=croire* degre_communication;
+				
+			}
+			
+			System.out.println(" Individu " + getLocalName() +" partage = " + partage);
+
+			
+			if(partage>0) {
+				contamine=true;
 				news_transmettre.incrementeNpartage();
+				System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
 				
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
-					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));
-					//partage.setContent(message.getContent());
+					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));					
 					propagate.setContent(String.valueOf(connexions.get(id)));
-					// newsTransmise.setContent(news.toJSON());
 					send(propagate);
 				}
 

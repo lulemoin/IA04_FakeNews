@@ -40,15 +40,15 @@ public class SecondaryBoot {
 		Random random2 = new Random();
 		System.out.println("veracite =  " + veracite);
 		double intensite;
-		//veracite entre 0,8 et 0,1, l'intensit� est entre 0 et 1
+		//veracite entre 0,8 et 0,1, l'intensite est entre 0,3 et 1
 		if (veracite > 0.8) {
-			 intensite = 0.01 + random2.nextInt(99)/100;
-		}
-		// veracite entre 0,4 et 0,8, l'intensit� est entre 0,3 et 1
-		else if (veracite > 0.4) {
 			 intensite = 0.3 + random2.nextInt(70)/100;
 		}
-		//veracite entre 0 et 0,4, l'intensit� est entre 0,7 et 1
+		// veracite entre 0,4 et 0,8, l'intensite est entre 0,5 et 1
+		else if (veracite > 0.4) {
+			 intensite = 0.5 + random2.nextInt(50)/100;
+		}
+		//veracite entre 0 et 0,4, l'intensite est entre 0,7 et 1
 		else{
 			 intensite = 0.7 + random2.nextInt(30)/100;
 		}
