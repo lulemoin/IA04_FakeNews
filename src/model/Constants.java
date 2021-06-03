@@ -18,3 +18,6 @@ public class Constants {
 	public static double MOYENNE_INTENSITE_CONNEXION = 0.7;
 	public static double ECART_TYPE_INTENSITE_CONNEXION = 0.5;
 }
+
+Le nombre de Drunbar :
+	individu a au meximum entre 100e t 230 connection. La moyenne étant à 150
