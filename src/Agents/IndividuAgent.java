@@ -212,7 +212,7 @@ public class IndividuAgent extends Agent{
 			
 			System.out.println("  individu " + getLocalName() +" croire = " + croire);
 						
-			//si la personne croit a plus de 0,75
+			
 			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();
 				croire=1.5*croire;
@@ -229,7 +229,7 @@ public class IndividuAgent extends Agent{
 			System.out.println(" Individu " + getLocalName() +" partage = " + partage);
 
 			
-			if(partage>0.5) {
+			if(partage>0.3) {
 				change_contamination_state();
 				news_transmettre.incrementeNpartage();
 				System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
