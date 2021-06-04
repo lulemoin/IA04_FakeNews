@@ -30,38 +30,10 @@ public class SecondaryBoot {
 	public static void main(String[] args) {
 		startWithProfile();
 		
-		// -------------- News singleton creation ---------------		
+		generateNews();
 		
-		
-		// veracite demandée à l'utilisateur et intensité en découle
-		Random random1 = new Random();
-		double veracite = random1.nextDouble();
-		if (veracite == 0) {
-			veracite = 0.01;
-		}
-		Random random2 = new Random();
-		System.out.println("veracite =  " + veracite);
-		double intensite;
-		//veracite entre 0,8 et 0,1, l'intensite est entre 0,3 et 1
-		if (veracite > 0.8) {
-			 intensite = 0.3 + random2.nextInt(70)/100;
-		}
-		// veracite entre 0,4 et 0,8, l'intensite est entre 0,5 et 1
-		else if (veracite > 0.4) {
-			 intensite = 0.5 + random2.nextInt(50)/100;
-		}
-		//veracite entre 0 et 0,4, l'intensite est entre 0,7 et 1
-		else{
-			 intensite = 0.7 + random2.nextInt(30)/100;
-		}
-		System.out.println("intensite = " + intensite);
-		News news_instance = News.getInstance();
-		news_instance.setVeracite(veracite);
-		news_instance.setIntensite(intensite);
-		
-		// To coment/decomment if you want GUI or not.
-		
-		//runUI();
+		// To coment/decomment to disable/enable GUI
+		runUI();
 		
 	}
 
@@ -91,6 +63,34 @@ public class SecondaryBoot {
 			ex.printStackTrace();
 		}
 	}
+	
+	public static void generateNews() {
+		// veracite demandee a� l'utilisateur et intensite en decoule
+		Random random1 = new Random();
+		double veracite = random1.nextDouble();
+		if (veracite == 0) {
+			veracite = 0.01;
+		}
+		Random random2 = new Random();
+		System.out.println("Veracite =  " + veracite + "\n");
+		
+		double intensite;
+		if (veracite > 0.8) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
+			 intensite = 0.3 + random2.nextInt(70)/100;
+		}
+		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
+			 intensite = 0.5 + random2.nextInt(50)/100;
+		}
+		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
+			 intensite = 0.7 + random2.nextInt(30)/100;
+		}
+		
+		System.out.println("Intensite = " + intensite + "\n");
+		News news_instance = News.getInstance();
+		news_instance.setVeracite(veracite);
+		news_instance.setIntensite(intensite);
+	}
+	
 	
 	public static void runUI() {
 		Population model = new Population(System.currentTimeMillis());
