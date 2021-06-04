@@ -6,6 +6,7 @@ import sim.field.continuous.*;
 import sim.field.network.*;
 
 import model.Constants;
+import model.News;
 
 import java.util.HashMap;
 import java.util.List;
@@ -63,14 +64,20 @@ public class Population extends SimState{
 		addAgents();
 
 		schedule();
-
-		/*
-		 * TODO add connexions between mason objects
-		 * 		get connexions object and iterate over it
-		 * 			''' buddies.addEdge(student, studentB, new Double( -buddiness)); '''
-		 * 		
-		 * HELP : buddiness is the intensity of the connexion !
-		 * 
+		
+		
+		
+		/* Ajout des connexions (à finir/ vérifier)
+		
+		InstantSimOverview ISO = InstantSimOverview.getInstance();
+		for (String aid : ISO.getIndividuAgents()) {
+			for (HashMap.Entry<String, Double> entry : ISO.getConnexion(aid).entrySet()) {
+			    buddies.addEdge(aid, entry.getKey(), entry.getValue());
+			}
+			
+			
+			
+		
 		 * TO GET all mason object : 
 		 * 	''' Bag students = buddies.getAllNodes(); '''
 		*/
