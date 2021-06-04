@@ -13,9 +13,11 @@ import java.util.Random;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import Agents.IndividuAgent;
-
+import gui.Population;
+import gui.PopulationWithUI;
 import model.Constants;
 import model.News;
+import sim.display.Console;
 
 public class SecondaryBoot {
 
@@ -57,6 +59,10 @@ public class SecondaryBoot {
 		news_instance.setVeracite(veracite);
 		news_instance.setIntensite(intensite);
 		
+		// To coment/decomment if you want GUI or not.
+		
+		//runUI();
+		
 	}
 
 	public static void startWithProfile() {
@@ -84,5 +90,13 @@ public class SecondaryBoot {
 		catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static void runUI() {
+		Population model = new Population(System.currentTimeMillis());
+		PopulationWithUI gui = new PopulationWithUI(model);
+		Console console = new Console(gui);
+		console.setVisible(true);
+		console.pressPlay();
 	}
 }

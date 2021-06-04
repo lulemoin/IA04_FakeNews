@@ -2,7 +2,7 @@ package model;
 
 public class Constants {
 	public static String DEFAULT_SIMULATION_AGENT = "Sim";
-	public static Integer NOMBRE_INDIVIDUS = 10;
+	public static Integer NOMBRE_INDIVIDUS = 100;
 
 	public static String DEFAULT_DEMANDEUR_AGENT = "Demandeur";
 	
@@ -17,6 +17,8 @@ public class Constants {
 	
 	public static double MOYENNE_INTENSITE_CONNEXION = 0.7;
 	public static double ECART_TYPE_INTENSITE_CONNEXION = 0.5;
+	
+	public static String BELIEVER_CHANGE = "Believe state changed";
 }
 
 /*

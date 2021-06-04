@@ -59,9 +59,14 @@ public class InstantSimOverview {
     	fireIndividuConnexions(str);
     }
     
-    public void changeBelieverState(String str, Boolean bool) {
-    	believerList.put(str, bool);
-    	fireIndividuBelieverList(str);
+    public void changeBelieverState(int id, Boolean bool) {
+    	fireIndividuBelieverList(id, bool);
+    }
+    
+    public void clear() {
+    	
+    	//TODO: make a function to clear singlton (is it necessary ?)
+    	
     }
     
     // ------------------- Listener management -------------
@@ -86,8 +91,9 @@ public class InstantSimOverview {
     	changeConnexions.firePropertyChange("List_Increased", null, val); 
 	}
     
-    private void fireIndividuBelieverList(String val) { 
-    	changeBelieverList.firePropertyChange("List_Increased", null, val); 
+    private void fireIndividuBelieverList(int id, boolean believeState) { 
+    	Object[] val = new Object[] { id, believeState };
+    	changeBelieverList.firePropertyChange(Constants.BELIEVER_CHANGE, null, val); 
 	}
 
 }

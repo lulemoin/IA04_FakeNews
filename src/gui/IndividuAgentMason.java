@@ -10,10 +10,13 @@ import java.util.Random;
 
 
 public class IndividuAgentMason implements Steppable {
-	private Random random = new Random();
-	boolean believer = random.nextBoolean();
-	AID id;
+	boolean believer = false;
+	int id;
 	public Population beings;
+	
+	public IndividuAgentMason(int val){
+		id = val;
+	}
 
 	@Override
 	public void step(SimState state) {

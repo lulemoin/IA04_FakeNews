@@ -6,6 +6,10 @@ import sim.field.continuous.*;
 import sim.field.network.*;
 
 import model.Constants;
+
+import java.util.HashMap;
+import java.util.List;
+
 import Agents.DemandeurAgent;
 
 
@@ -19,6 +23,10 @@ public class Population extends SimState{
 	//network creation - true is because it is a directed graph
 	public Network buddies = new Network(true);
 	
+	
+	// To link Individu object with their id and facilitate iteration over them
+	public HashMap<Integer, IndividuAgentMason> agents;
+	
 	double middleY = yard.getHeight() * 0.5;
 	double middleX = yard.getWidth() * 0.5;
 
@@ -27,6 +35,20 @@ public class Population extends SimState{
 	public Population(long seed)
 	{
 		super(seed);
+		
+		InstantSimOverview simOverview = InstantSimOverview.getInstance();
+		// simOverview.clear();
+		
+		simOverview.addPropertyChangeListenerBelieverList(Constants.BELIEVER_CHANGE, evt -> {
+			Object[] vals = (Object[]) evt.getNewValue();
+			int id = (int) vals[0];
+			boolean bool = (boolean) vals[1];
+			IndividuAgentMason ind = agents.get(id);
+			ind.believer = bool;
+			System.out.println("TEEEEESSSSSSSSSSSSSTTTTTTTT");
+			
+		});
+		
 	}
 	public void start()
 	{
@@ -36,24 +58,12 @@ public class Population extends SimState{
 		// clear the buddies
 		buddies.clear();
 		// add some students to the yard
-		
-		//TODO faire un tableau d'AID pour pouvoir identifier les agents mason et les lier aux agents JADE ?
-		
-		
-		for(int i = 0; i < Constants.NOMBRE_INDIVIDUS; i++)
-		{
-			IndividuAgentMason individu = new IndividuAgentMason();
-			yard.setObjectLocation(
-				individu,
-				new Double2D(
-						middleX + random.nextDouble() * middleX * 0.5,
-						middleY + random.nextDouble() * middleY * 0.5
-				)
-			);
-			buddies.addNode(individu);
-			schedule.scheduleRepeating(individu);
-		}
-		
+		agents = new HashMap<Integer, IndividuAgentMason>();
+
+		addAgents();
+
+		schedule();
+
 		/*
 		 * TODO add connexions between mason objects
 		 * 		get connexions object and iterate over it
@@ -66,9 +76,28 @@ public class Population extends SimState{
 		*/
 				
 	}
-	public static void main(String[] args)
-	{
-		doLoop(Population.class, args);
-		System.exit(0);
+	
+	private void schedule() {
+		agents.forEach((k, v) -> {
+				schedule.scheduleRepeating(v);
+			});
 	}
+	
+	private void addAgents() {
+		for(int i = 1; i <= Constants.NOMBRE_INDIVIDUS; i++)
+		{
+			IndividuAgentMason individu = new IndividuAgentMason(i);
+			yard.setObjectLocation(
+				individu,
+				new Double2D(
+						middleX + random.nextDouble() * middleX * 0.5,
+						middleY + random.nextDouble() * middleY * 0.5
+				)
+			);
+			buddies.addNode(individu);
+			agents.put(i, individu);
+		}
+	}
+	
+	
 }

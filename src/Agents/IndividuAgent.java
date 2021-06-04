@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import gui.InstantSimOverview;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -33,6 +34,8 @@ public class IndividuAgent extends Agent{
 	boolean connexions_set = false;
 	private News news_instance;
 	boolean contamine=false;
+	int id;
+	InstantSimOverview simOverview;
 	
 	//Double c'est l'intensite de la connexion
 	HashMap<String, Double> connexions = new HashMap<String, Double>();
@@ -41,6 +44,11 @@ public class IndividuAgent extends Agent{
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		
+		//Get int ID from local name - get singleton simOverview (Mason_Linkage)
+		String[] strFinal = getLocalName().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+		id = Integer.parseInt(strFinal[1]);
+		
+		simOverview = InstantSimOverview.getInstance();
 		
 		Random r = new Random();
 		while (esprit_critique <=0 || esprit_critique >1)
@@ -136,7 +144,7 @@ public class IndividuAgent extends Agent{
 					partage.setContent(String.valueOf(connexions.get(id)));
 					send(partage);
 				}
-				contamine=true;
+				change_contamination_state();
 				
 			} else
 				block();
@@ -166,7 +174,6 @@ public class IndividuAgent extends Agent{
 	public class DecisionBehaviour extends OneShotBehaviour {
 		ACLMessage message;
 		
-		
 		public DecisionBehaviour(Agent a, ACLMessage message) {
 			super(a);
 			this.message = message;
@@ -194,9 +201,7 @@ public class IndividuAgent extends Agent{
 			Double IntConnexion = Double.valueOf(message.getContent()); 
 			
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
-			
-			//TODO: avoir un attribut boolean "believer" pour savoir à tout moment si l'agent y croit ou pas.
-			
+						
 			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
 			croire = news_proche? 2 * croire : croire;
 			
@@ -219,14 +224,13 @@ public class IndividuAgent extends Agent{
 			}
 			else {
 				partage=croire* degre_communication;
-				
 			}
 			
 			System.out.println(" Individu " + getLocalName() +" partage = " + partage);
 
 			
 			if(partage>0.5) {
-				contamine=true;
+				change_contamination_state();
 				news_transmettre.incrementeNpartage();
 				System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
 				
@@ -236,14 +240,16 @@ public class IndividuAgent extends Agent{
 					propagate.setContent(String.valueOf(connexions.get(id)));
 					send(propagate);
 				}
-
-				
-				
 			}
-		
-				
-			}
-		
 		}
+	}
+	
+	private void change_contamination_state() {
+		/*
+		 * Change this.contamine to true, and tells simOverview Singleton to fire a proprety change.
+		 */
+		this.contamine = true;
+		simOverview.changeBelieverState(id, this.contamine);
+	}
 	
 }
