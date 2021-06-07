@@ -161,9 +161,9 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				System.out.println(contamine);
+				//System.out.println(contamine);
 				if(!contamine) {	
-				System.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
+				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message));
 				}
 			} else
@@ -219,12 +219,12 @@ public class IndividuAgent extends Agent{
 			}
 			
 			
-			System.out.println("  individu " + getLocalName() +" croire = " + croire);
+			//System.out.println("  individu " + getLocalName() +" croire = " + croire);
 						
 			
 			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();
-				croire=1.5*croire;
+			    //croire=1.5*croire;
 				//contamine=true;
 			}
 			
