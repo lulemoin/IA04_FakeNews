@@ -75,11 +75,13 @@ public class SecondaryBoot {
 		System.out.println("Veracite =  " + veracite + "\n");
 		
 		double intensite;
-		if (veracite > 0.8) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
-			 intensite = 0.3 + random2.nextInt(70)/100;
+		
+	            
+		if (veracite > 0.7) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
+			 intensite = 0.1 + random2.nextInt(90)/100;
 		}
 		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
-			 intensite = 0.5 + random2.nextInt(50)/100;
+			 intensite = 0.3 + random2.nextInt(70)/100;
 		}
 		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
 			 intensite = 0.7 + random2.nextInt(30)/100;
