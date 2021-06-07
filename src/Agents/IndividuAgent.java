@@ -224,19 +224,17 @@ public class IndividuAgent extends Agent{
 			
 			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();
-			    //croire=1.5*croire;
-				//contamine=true;
 			}
 					   
 		    partage=croire * degre_communication;
 		    
-			if (Np*Constants.NOMBRE_INDIVIDUS>0.8) {
+			if (Np/Constants.NOMBRE_INDIVIDUS>0.8) {
 				partage*=2;
 			}
-			else if (Np*Constants.NOMBRE_INDIVIDUS>0.6) {
+			else if (Np/Constants.NOMBRE_INDIVIDUS>0.6) {
 				partage*=1.5;
 				}
-			else if (Np*Constants.NOMBRE_INDIVIDUS<0.2) {
+			else if (Np/Constants.NOMBRE_INDIVIDUS<0.2) {
 				partage*=0.7;
 				}
 			
@@ -253,7 +251,7 @@ public class IndividuAgent extends Agent{
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
 					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));					
-					propagate.setContent(String.valueOf(connexions.get(id));
+					propagate.setContent(String.valueOf(connexions.get(id)));
 					send(propagate);
 				}
 			}

@@ -26,6 +26,7 @@ import jade.proto.AchieveREInitiator;
 import jade.util.leap.Serializable;
 
 import model.Constants;
+import model.News;
 
 import java.io.IOException;
 import java.lang.Math.*;
@@ -36,7 +37,7 @@ public class DemandeurAgent extends Agent {
 	public List<String> IndividuAgents = new ArrayList<String>();
 	//static DemandeurAgent instance;
 	public int done = 0;
-	public AID news;
+	public News news;
 
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
@@ -60,8 +61,6 @@ public class DemandeurAgent extends Agent {
 //		return instance;
 //	}
 //	
-	
-	
 		
 	//Behaviour d'attente des souscriptions des individus
 	private class WaitSubscriptions extends Behaviour {
@@ -115,7 +114,7 @@ public class DemandeurAgent extends Agent {
 		
 		private void HandleInform() {
 			done = 1;
-			//news = ??
+			news = News.getInstance();			 
 		}
 		
 		private void HandleRefuse() {
@@ -193,5 +192,10 @@ public class DemandeurAgent extends Agent {
 //	//quel est le tick ?
 //	// envoyer des messages uniquement quand la liste n'est pas vide
 
-
+//	private class getProfondeur extends OneShotBehaviour {
+//		String racine=news.getEmetteurInitial();
+//	}
+	
+	
+	
 	
