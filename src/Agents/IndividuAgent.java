@@ -164,7 +164,7 @@ public class IndividuAgent extends Agent{
 				//System.out.println(contamine);
 				if(!contamine) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
-				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME)));
+				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
 				}
 			} else
 				block();
