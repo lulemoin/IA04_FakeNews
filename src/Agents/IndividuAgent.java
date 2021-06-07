@@ -179,7 +179,7 @@ public class IndividuAgent extends Agent{
 			this.message = message;
 		}
 		
-		public void action() {
+		public void onWake() {
 			
 			//System.out.println("Individu " + getLocalName() + "a recu la news, ses connections :"+ connexions );
 			News news_transmettre = News.getInstance();
@@ -253,7 +253,7 @@ public class IndividuAgent extends Agent{
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
 					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));					
-					propagate.setContent(String.valueOf(connexions.get(id)));
+					propagate.setContent(String.valueOf(connexions.get(id));
 					send(propagate);
 				}
 			}
