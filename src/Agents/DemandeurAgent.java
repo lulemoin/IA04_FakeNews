@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import gui.InstantSimOverview;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -26,6 +27,7 @@ import jade.proto.AchieveREInitiator;
 import jade.util.leap.Serializable;
 
 import model.Constants;
+import model.News;
 
 import java.io.IOException;
 import java.lang.Math.*;
@@ -37,10 +39,41 @@ public class DemandeurAgent extends Agent {
 	//static DemandeurAgent instance;
 	public int done = 0;
 	public AID news;
+	//simu
+	int id;
+	InstantSimOverview simOverview;
 
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		//addBehaviour(new WaitSubscriptions());
+		
+		
+		/*************************simu****************************/
+		//Get int ID from local name - get singleton simOverview (Mason_Linkage)
+		String[] strFinal = getLocalName().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+		id = Integer.parseInt(strFinal[1]);
+		
+		simOverview = InstantSimOverview.getInstance();
+		
+		News.getInstance().addPropertyChangeListener(Constants.SIMU_OVER, evt -> {
+			Object[] vals = (Object[]) evt.getNewValue();
+			int row = (int) vals[0];
+			String value = (String) vals[1];
+			NumberAgent agent = agents.get(row);
+			agent.val = value;
+		});
+		
+		// ajoute une fonction, listener du sudoku sur la propriété sudokuOver
+		// La fonction envoie un message pour arrêter la simulation		
+		/*News.getInstance().addPropertyChangeListener(Constants.SIMU_OVER, evt -> {
+			if ((boolean) evt.getNewValue()) {
+				//News.print();
+				doDelete();
+			}
+		});*/
+		
+		/*****************SIMU********************/
+
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
 		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus ï¿½ passer

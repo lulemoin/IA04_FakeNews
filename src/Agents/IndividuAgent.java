@@ -164,7 +164,7 @@ public class IndividuAgent extends Agent{
 				//System.out.println(contamine);
 				if(!contamine) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
-				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME)));
+				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
 				}
 			} else
 				block();
@@ -253,7 +253,7 @@ public class IndividuAgent extends Agent{
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
 					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));					
-					propagate.setContent(String.valueOf(connexions.get(id));
+					propagate.setContent(String.valueOf(connexions.get(id)));
 					send(propagate);
 				}
 			}

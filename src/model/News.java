@@ -1,10 +1,13 @@
 package model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jade.core.AID;
+import java.sql.Timestamp;
 
 
 public class News {
@@ -13,6 +16,14 @@ public class News {
 	private String emetteurInitial;  
 	private int n_partage = 0;
 	private int n_atteints = 0;
+	private Timestamp timeLastIndivPartage;
+	
+	PropertyChangeSupport  changes = new PropertyChangeSupport(this);
+	Boolean newsOver;
+	
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		changes.addPropertyChangeListener(propertyName, listener);
+	}
 
 	private static final News instance = new News();
 	
@@ -39,6 +50,7 @@ public class News {
 	
 	public void incrementeNpartage() {
 		this.n_partage+=1;
+		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
 	}
 	
 	public int getNatteints() {
@@ -71,6 +83,15 @@ public class News {
 
 	public void setEmetteurInitial(String emetteurInitial) {
 		this.emetteurInitial = emetteurInitial;
+	}
+
+	public Timestamp getTimeLastIndivPartage() {
+		return timeLastIndivPartage;
+	}
+
+	public boolean isTimedout() {
+		long now = new Timestamp(System.currentTimeMillis()).getTime(); 
+		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
 	}
 
 }
