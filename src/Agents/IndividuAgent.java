@@ -181,7 +181,7 @@ public class IndividuAgent extends Agent{
 		
 		public void action() {
 			
-			System.out.println("Individu " + getLocalName() + "a recu la news, ses connections :"+ connexions );
+			//System.out.println("Individu " + getLocalName() + "a recu la news, ses connections :"+ connexions );
 			News news_transmettre = News.getInstance();
 			double croire;
 			double partage;
@@ -227,21 +227,28 @@ public class IndividuAgent extends Agent{
 			    //croire=1.5*croire;
 				//contamine=true;
 			}
-			
-			if (Np>=1) {
-			partage=croire * Np * degre_communication;
+					   
+		    partage=croire * degre_communication;
+		    
+			if (Np*Constants.NOMBRE_INDIVIDUS>0.8) {
+				partage*=2;
 			}
-			else {
-				partage=croire* degre_communication;
-			}
+			else if (Np*Constants.NOMBRE_INDIVIDUS>0.6) {
+				partage*=1.5;
+				}
+			else if (Np*Constants.NOMBRE_INDIVIDUS<0.2) {
+				partage*=0.7;
+				}
 			
-			System.out.println(" Individu " + getLocalName() +" partage = " + partage);
+			//System.out.println(" Individu " + getLocalName() +" partage = " + partage);
 
 			
 			if(partage>0.5) {
 				change_contamination_state();
 				news_transmettre.incrementeNpartage();
-				System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
+				//System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
+
+				System.out.println(" nbpartage" + News.getInstance().getNpartage());
 				
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
