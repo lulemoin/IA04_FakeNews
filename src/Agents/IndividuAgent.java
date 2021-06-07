@@ -164,18 +164,18 @@ public class IndividuAgent extends Agent{
 				//System.out.println(contamine);
 				if(!contamine) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
-				addBehaviour(new DecisionBehaviour(myAgent, message));
+				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME)));
 				}
 			} else
 				block();
 		}
 	}
 	
-	public class DecisionBehaviour extends OneShotBehaviour {
+	public class DecisionBehaviour extends WakerBehaviour {
 		ACLMessage message;
 		
-		public DecisionBehaviour(Agent a, ACLMessage message) {
-			super(a);
+		public DecisionBehaviour(Agent a, ACLMessage message, long delay) {
+			super(a, delay);
 			this.message = message;
 		}
 		

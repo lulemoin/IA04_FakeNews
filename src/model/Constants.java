@@ -19,6 +19,8 @@ public class Constants {
 	public static double ECART_TYPE_INTENSITE_CONNEXION = 0.5;
 	
 	public static String BELIEVER_CHANGE = "Believe state changed";
+
+	public static long STEP_TIME = 2000; //2sec
 }
 
 /*
