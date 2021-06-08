@@ -238,8 +238,6 @@ public class IndividuAgent extends Agent{
 				partage*=0.7;
 				}
 			
-			//System.out.println(" Individu " + getLocalName() +" partage = " + partage);
-
 			
 			if(partage>0.5) {
 				change_contamination_state();

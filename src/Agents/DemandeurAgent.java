@@ -49,6 +49,7 @@ public class DemandeurAgent extends Agent {
 		sequence.addSubBehaviour(new SelectIdReceiver(this, 1000));
 		
 		addBehaviour(sequence);
+		addBehaviour(new waitForTerminaisonSimulation(this, 2000));
 	}
 	
 	
@@ -168,7 +169,29 @@ public class DemandeurAgent extends Agent {
 			}
 		}
 	}
+
+	
+	private class waitForTerminaisonSimulation extends TickerBehaviour {
+	
+		public waitForTerminaisonSimulation(Agent a, long period) {
+			super(a, period);
+			
+		}
+	
+		@Override
+		protected void onTick() {
+			if (News.getInstance().isTimedout()) {
+				//ecrire dans le fichier les outputs
+				
+				//arreter la simu
+				doDelete();
+			}
+			
+		}
+		
+	}
 }
+
 	
 ////doit avoir un oeil sur les fakes news en cours
 //	// des qu'une fake news est finie, il en renvoie une nouvelle ?

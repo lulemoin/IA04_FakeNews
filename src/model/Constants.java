@@ -21,6 +21,9 @@ public class Constants {
 	public static String BELIEVER_CHANGE = "Believe state changed";
 
 	public static long STEP_TIME = 2000; //2sec
+	public static long NEWS_TO_PARTAGE_TIMEOUT = 4000; //4sec
+	
+	public static String SIMU_OVER = "simuOver";
 }
 
 /*
