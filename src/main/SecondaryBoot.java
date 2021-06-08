@@ -30,7 +30,7 @@ public class SecondaryBoot {
 	public static void main(String[] args) {
 		startWithProfile();
 		
-		generateNews();
+		News.generateNews();
 		
 		// To coment/decomment to disable/enable GUI
 		runUI();
@@ -64,34 +64,6 @@ public class SecondaryBoot {
 		}
 	}
 	
-	public static void generateNews() {
-		// veracite demandee a  l'utilisateur et intensite en decoule
-		Random random1 = new Random();
-		double veracite = random1.nextDouble();
-		if (veracite == 0) {
-			veracite = 0.01;
-		}
-		Random random2 = new Random();
-		System.out.println("Veracite =  " + veracite + "\n");
-		
-		double intensite;
-		
-	            
-		if (veracite > 0.7) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
-			 intensite = 0.1 + random2.nextInt(90)/100;
-		}
-		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
-			 intensite = 0.3 + random2.nextInt(70)/100;
-		}
-		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
-			 intensite = 0.7 + random2.nextInt(30)/100;
-		}
-		
-		System.out.println("Intensite = " + intensite + "\n");
-		News news_instance = News.getInstance();
-		news_instance.setVeracite(veracite);
-		news_instance.setIntensite(intensite);
-	}
 	
 	
 	public static void runUI() {

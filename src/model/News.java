@@ -8,17 +8,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jade.core.AID;
 import java.sql.Timestamp;
+import java.util.Random;
 
 
 public class News {
-	private double veracite;
-	private double intensite;
-	private String emetteurInitial;  
-	private int n_partage = 0;
-	private int n_atteints = 0;
-	private int profondeur = 0;
-	private Timestamp startTime;
-	private Timestamp timeLastIndivPartage;
+	private static double veracite;
+	private static double intensite;
+	private static String emetteurInitial;  
+	private static int n_partage = 0;
+	private static int n_atteints = 0;
+	private static int profondeur = 0;
+	private static Timestamp startTime;
+	private static Timestamp timeLastIndivPartage;
 	
 	PropertyChangeSupport  changes = new PropertyChangeSupport(this);
 	Boolean newsOver;
@@ -116,7 +117,36 @@ public class News {
 		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
 	}
 	
-	
+	public static void generateNews() {
+		//on réinitialise les parametres
+		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
+		startTime = new Timestamp(System.currentTimeMillis());
+		profondeur = 0;
+		n_partage = 0;
+		n_atteints = 0;
+		
+		// veracite demandee a  l'utilisateur et intensite en decoule
+		Random random1 = new Random();
+		veracite = random1.nextDouble();
+		if (veracite == 0) {
+			veracite = 0.01;
+		}
+		Random random2 = new Random();
+		System.out.println("Veracite =  " + veracite + "\n");
+		
+	            
+		if (veracite > 0.7) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
+			 intensite = 0.1 + random2.nextInt(90)/100;
+		}
+		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
+			 intensite = 0.3 + random2.nextInt(70)/100;
+		}
+		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
+			 intensite = 0.7 + random2.nextInt(30)/100;
+		}
+		
+		System.out.println("Intensite = " + intensite + "\n");
+	}
 	
 
 }

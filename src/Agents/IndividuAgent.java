@@ -144,7 +144,7 @@ public class IndividuAgent extends Agent{
 					partage.setContent(String.valueOf(connexions.get(id)));
 					send(partage);
 				}
-				change_contamination_state();
+				change_contamination_state(true);
 				
 			} else
 				block();
@@ -240,7 +240,7 @@ public class IndividuAgent extends Agent{
 			
 			
 			if(partage>0.5) {
-				change_contamination_state();
+				change_contamination_state(true);
 				news_transmettre.incrementeNpartage();
 				//System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
 
@@ -256,11 +256,32 @@ public class IndividuAgent extends Agent{
 		}
 	}
 	
-	private void change_contamination_state() {
+	
+	/* Behaviour qui attend les requetes de news de l'agent Environnement */
+	public class WaitforEndingNewsBehaviour extends CyclicBehaviour {
+		MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.DISCONFIRM);
+		
+		@Override
+		public void action() {
+			
+			ACLMessage message = receive(mt);
+			
+			if (message != null) {
+				change_contamination_state(false);
+				
+			} else {
+				block();
+			}
+				
+		}
+	}
+	
+	
+	private void change_contamination_state(boolean isContamined) {
 		/*
 		 * Change this.contamine to true, and tells simOverview Singleton to fire a proprety change.
 		 */
-		this.contamine = true;
+		this.contamine = isContamined;
 		simOverview.changeBelieverState(id, this.contamine);
 	}
 	

@@ -50,7 +50,7 @@ public class DemandeurAgent extends Agent {
 		sequence.addSubBehaviour(new SelectIdReceiver(this, 1000));
 		
 		addBehaviour(sequence);
-		addBehaviour(new waitForTerminaisonSimulation(this, 2000));
+		addBehaviour(new waitForNextNews(this, 2000));
 	}
 	
 	
@@ -172,9 +172,9 @@ public class DemandeurAgent extends Agent {
 	}
 
 	
-	private class waitForTerminaisonSimulation extends TickerBehaviour {
+	private class waitForNextNews extends TickerBehaviour {
 	
-		public waitForTerminaisonSimulation(Agent a, long period) {
+		public waitForNextNews(Agent a, long period) {
 			super(a, period);
 			
 		}
@@ -192,9 +192,20 @@ public class DemandeurAgent extends Agent {
 				News.getInstance().setProfondeur(profondeur);
 				
 				
+				News.getInstance().generateNews();
 				
-				//supprime l'agent
-				doDelete();
+				//envoyer un message aux agents pour qu'ils remettent leur contamination a false
+				Iterator<String> it = IndividuAgents.iterator();
+				while(it.hasNext()) {
+					String aid = it.next();
+					ACLMessage disconfirm_msg = new ACLMessage(ACLMessage.DISCONFIRM);
+					disconfirm_msg.addReceiver(new AID(aid, AID.ISLOCALNAME));
+					send(disconfirm_msg);
+				}
+				
+				//selectIDReceiver
+				addBehaviour(new SelectIdReceiver(myAgent, 1000));
+
 			}
 			
 		}
