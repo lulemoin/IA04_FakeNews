@@ -83,6 +83,10 @@ public class InstantSimOverview {
     	changeBelieverList.addPropertyChangeListener(propertyName, listener); 
 	}
     
+    public void addPropertyChangeListenerSimOver(String propertyName, PropertyChangeListener listener) { 
+    	changeBelieverList.addPropertyChangeListener(propertyName, listener); 
+	}
+    
     private void fireIndividuAgents(String val) { 
     	changeIndividuAgents.firePropertyChange("List_Increased", null, val); 
 	}
@@ -95,5 +99,11 @@ public class InstantSimOverview {
     	Object[] val = new Object[] { id, believeState };
     	changeBelieverList.firePropertyChange(Constants.BELIEVER_CHANGE, null, val); 
 	}
+    
+    private void fireSimOver(boolean isSimOver) { 
+    	Object[] val = new Object[] { isSimOver };
+    	changeBelieverList.firePropertyChange(Constants.SIMU_OVER, null, val); 
+	}
+    
 
 }

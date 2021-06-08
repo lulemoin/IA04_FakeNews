@@ -39,40 +39,11 @@ public class DemandeurAgent extends Agent {
 	//static DemandeurAgent instance;
 	public int done = 0;
 	public AID news;
-	//simu
-	int id;
-	InstantSimOverview simOverview;
-
+	
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		//addBehaviour(new WaitSubscriptions());
 		
-		
-		/*************************simu****************************/
-		//Get int ID from local name - get singleton simOverview (Mason_Linkage)
-		String[] strFinal = getLocalName().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-		id = Integer.parseInt(strFinal[1]);
-		
-		simOverview = InstantSimOverview.getInstance();
-		
-		News.getInstance().addPropertyChangeListener(Constants.SIMU_OVER, evt -> {
-			Object[] vals = (Object[]) evt.getNewValue();
-			int row = (int) vals[0];
-			String value = (String) vals[1];
-			NumberAgent agent = agents.get(row);
-			agent.val = value;
-		});
-		
-		// ajoute une fonction, listener du sudoku sur la propriété sudokuOver
-		// La fonction envoie un message pour arrêter la simulation		
-		/*News.getInstance().addPropertyChangeListener(Constants.SIMU_OVER, evt -> {
-			if ((boolean) evt.getNewValue()) {
-				//News.print();
-				doDelete();
-			}
-		});*/
-		
-		/*****************SIMU********************/
 
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
@@ -81,6 +52,8 @@ public class DemandeurAgent extends Agent {
 		sequence.addSubBehaviour(new SelectIdReceiver(this, 1000));
 		
 		addBehaviour(sequence);
+		
+		addBehaviour(new waitForTerminaisonSimulation(this, 2000));
 	}
 	
 	
@@ -201,6 +174,27 @@ public class DemandeurAgent extends Agent {
 				send(connexions_msg);
 			}
 		}
+	}
+	
+	
+	private class waitForTerminaisonSimulation extends TickerBehaviour {
+
+		public waitForTerminaisonSimulation(Agent a, long period) {
+			super(a, period);
+			
+		}
+
+		@Override
+		protected void onTick() {
+			if (News.getInstance().isTimedout()) {
+				//ecrire dans le fichier les outputs
+				
+				//arreter la simu
+				doDelete();
+			}
+			
+		}
+		
 	}
 }
 	

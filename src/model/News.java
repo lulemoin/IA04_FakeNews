@@ -28,6 +28,7 @@ public class News {
 	private static final News instance = new News();
 	
 	private News() {
+		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
 	}
 	
 	/*
@@ -91,7 +92,12 @@ public class News {
 
 	public boolean isTimedout() {
 		long now = new Timestamp(System.currentTimeMillis()).getTime(); 
-		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
+		System.out.println("now " + now );
+		System.out.println("timeLastIndivPartage.getTime() " + timeLastIndivPartage.getTime() );
+		System.out.println("Constants.NEWS_TO_PARTAGE_TIMEOUT = " +  Constants.NEWS_TO_PARTAGE_TIMEOUT);
+		System.out.println("now - timeLastIndivPartage.getTime() = " + (now - timeLastIndivPartage.getTime()) );
+		System.out.println("now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT = " + (boolean) (now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT ));
+		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT * 1000;
 	}
 
 }

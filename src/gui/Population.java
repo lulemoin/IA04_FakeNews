@@ -46,8 +46,15 @@ public class Population extends SimState{
 			boolean bool = (boolean) vals[1];
 			IndividuAgentMason ind = agents.get(id);
 			ind.believer = bool;
-			System.out.println("TEEEEESSSSSSSSSSSSSTTTTTTTT");
 			
+		});
+		
+		
+		simOverview.addPropertyChangeListenerBelieverList(Constants.SIMU_OVER, evt -> {
+			Object[] vals = (Object[]) evt.getNewValue();
+			boolean bool = (boolean) vals[0];
+			//arreter la simu ?
+			//onEnd();
 		});
 		
 	}
