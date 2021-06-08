@@ -17,6 +17,7 @@ public class News {
 	private int n_partage = 0;
 	private int n_atteints = 0;
 	private int profondeur = 0;
+	private Timestamp startTime;
 	private Timestamp timeLastIndivPartage;
 	
 	PropertyChangeSupport  changes = new PropertyChangeSupport(this);
@@ -30,6 +31,7 @@ public class News {
 	
 	private News() {
 		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
+		startTime = new Timestamp(System.currentTimeMillis());
 	}
 	
 	/*
@@ -76,9 +78,13 @@ public class News {
 	}
 	
 	public double getProfondeur() {
-		return intensite;
+		return profondeur;
 	}
-
+	
+	public void setProfondeur(int profondeur) {
+		this.profondeur = profondeur;
+	}
+	
 	public void setIntensite(double intensite) {
 		this.intensite = intensite;
 	}
@@ -94,6 +100,11 @@ public class News {
 	public Timestamp getTimeLastIndivPartage() {
 		return timeLastIndivPartage;
 	}
+	
+	public Timestamp getStartTime() {
+		return startTime;
+	}
+	
 
 	public boolean isTimedout() {
 		long now = new Timestamp(System.currentTimeMillis()).getTime(); 
@@ -102,7 +113,7 @@ public class News {
 		System.out.println("Constants.NEWS_TO_PARTAGE_TIMEOUT = " +  Constants.NEWS_TO_PARTAGE_TIMEOUT);
 		System.out.println("now - timeLastIndivPartage.getTime() = " + (now - timeLastIndivPartage.getTime()) );
 		System.out.println("now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT = " + (boolean) (now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT ));
-		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT * 1000;
+		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
 	}
 
 }

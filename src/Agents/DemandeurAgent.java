@@ -30,6 +30,7 @@ import model.News;
 
 import java.io.IOException;
 import java.lang.Math.*;
+import java.sql.Timestamp;
 
 
 public class DemandeurAgent extends Agent {
@@ -73,7 +74,7 @@ public class DemandeurAgent extends Agent {
 			
 			// si un message est re�u, on ajoute l'aid du sender
 			if (message != null) {
-				if (!IndividuAgents.contains(message.getSender())) {
+				if (!IndividuAgents.contains(message.getSender().getLocalName())) {
 					IndividuAgents.add(message.getSender().getLocalName());
 				}
 				//sinon on r�pond par un message failure
@@ -181,9 +182,16 @@ public class DemandeurAgent extends Agent {
 		@Override
 		protected void onTick() {
 			if (News.getInstance().isTimedout()) {
+				long now = new Timestamp(System.currentTimeMillis()).getTime();
+				long lifeTime = now - News.getInstance().getStartTime().getTime();				
+				int profondeur = Math.round(lifeTime/Constants.STEP_TIME) - 2;
+				System.out.println("profondeur  " + profondeur);
 				//ecrire dans le fichier les outputs
-				
 				//arreter la simu
+				
+				News.getInstance().setProfondeur(profondeur);
+				
+				
 				doDelete();
 			}
 			
