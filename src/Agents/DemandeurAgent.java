@@ -192,6 +192,8 @@ public class DemandeurAgent extends Agent {
 				News.getInstance().setProfondeur(profondeur);
 				
 				
+				
+				//supprime l'agent
 				doDelete();
 			}
 			
