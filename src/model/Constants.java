@@ -19,6 +19,7 @@ public class Constants {
 	public static double ECART_TYPE_INTENSITE_CONNEXION = 0.5;
 	
 	public static String BELIEVER_CHANGE = "Believe state changed";
+	public static String READ_NEWS = "Read Fake News";
 
 	public static long STEP_TIME = 2000; //2sec
 	public static long NEWS_TO_PARTAGE_TIMEOUT = 4000; //4sec

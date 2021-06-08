@@ -65,6 +65,8 @@ public class PopulationWithUI extends GUIState
 				IndividuAgentMason individu = (IndividuAgentMason)object;
 				if (individu.believer)
 					paint = Color.RED;
+				else if (individu.reached)
+					paint = Color.ORANGE;
 				else
 					paint = Color.GREEN;
 				super.draw(object, graphics, info);

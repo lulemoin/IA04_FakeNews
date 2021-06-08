@@ -49,6 +49,14 @@ public class Population extends SimState{
 			
 		});
 		
+		simOverview.addPropertyChangeListenerReadNews(Constants.READ_NEWS, evt -> {
+			Object[] vals = (Object[]) evt.getNewValue();
+			int id = (int) vals[0];
+			boolean bool = (boolean) vals[1];
+			IndividuAgentMason ind = agents.get(id);
+			ind.reached = bool;
+		});
+		
 	}
 	public void start()
 	{

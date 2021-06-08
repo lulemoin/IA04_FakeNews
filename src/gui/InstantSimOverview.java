@@ -14,7 +14,7 @@ public class InstantSimOverview {
 	private HashMap<String, HashMap<String, Double>> connexions = new HashMap<String, HashMap<String, Double>>();
 	private HashMap<String, Boolean> believerList = new HashMap<String, Boolean>();
 	
-	PropertyChangeSupport changeIndividuAgents = new PropertyChangeSupport(this);
+	PropertyChangeSupport ReadFNews = new PropertyChangeSupport(this);
 	PropertyChangeSupport changeConnexions = new PropertyChangeSupport(this); 
 	PropertyChangeSupport changeBelieverList = new PropertyChangeSupport(this); 
 	
@@ -49,9 +49,8 @@ public class InstantSimOverview {
     
     //Adding something to an attribute
     
-    public void addIndividuAgent(String str) {
-    	IndividuAgents.add(str);
-    	fireIndividuAgents(str);
+    public void changeReadNews(int id, Boolean bool) {
+    	fireReadNews(id, bool);
     }
     
     public void addConnexion(String str, HashMap<String, Double> map) {
@@ -71,8 +70,8 @@ public class InstantSimOverview {
     
     // ------------------- Listener management -------------
     
-    public void addPropertyChangeListenerIndividuAgents(String propertyName, PropertyChangeListener listener) { 
-    	changeIndividuAgents.addPropertyChangeListener(propertyName, listener); 
+    public void addPropertyChangeListenerReadNews(String propertyName, PropertyChangeListener listener) { 
+    	ReadFNews.addPropertyChangeListener(propertyName, listener); 
 	}
     
     public void addPropertyChangeListenerConnexions(String propertyName, PropertyChangeListener listener) { 
@@ -83,8 +82,9 @@ public class InstantSimOverview {
     	changeBelieverList.addPropertyChangeListener(propertyName, listener); 
 	}
     
-    private void fireIndividuAgents(String val) { 
-    	changeIndividuAgents.firePropertyChange("List_Increased", null, val); 
+    private void fireReadNews(int id, boolean read) { 
+    	Object[] val = new Object[] { id, read };
+    	ReadFNews.firePropertyChange(Constants.READ_NEWS, null, val); 
 	}
     
     private void fireIndividuConnexions(String val) { 

@@ -34,6 +34,7 @@ public class IndividuAgent extends Agent{
 	boolean connexions_set = false;
 	private News news_instance;
 	boolean contamine=false;
+	boolean readNews = false;
 	int id;
 	InstantSimOverview simOverview;
 	
@@ -165,6 +166,7 @@ public class IndividuAgent extends Agent{
 				if(!contamine) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
+				change_readNews_state(true);
 				}
 			} else
 				block();
@@ -283,6 +285,14 @@ public class IndividuAgent extends Agent{
 		 */
 		this.contamine = isContamined;
 		simOverview.changeBelieverState(id, this.contamine);
+	}
+	
+	private void change_readNews_state(boolean bool) {
+		/*
+		 * Change this.contamine to true, and tells simOverview Singleton to fire a proprety change.
+		 */
+		this.contamine = bool;
+		simOverview.changeReadNews(id, this.contamine);
 	}
 	
 }
