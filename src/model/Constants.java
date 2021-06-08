@@ -24,6 +24,9 @@ public class Constants {
 	public static long NEWS_TO_PARTAGE_TIMEOUT = 4000; //4sec
 	
 	public static String SIMU_OVER = "simuOver";
+	
+	public static int WINDOW_SIZE = 600;
+	public static int DOT_SIZE = 7;
 }
 
 /*

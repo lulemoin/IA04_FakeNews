@@ -7,6 +7,9 @@ import sim.display.*;
 import sim.portrayal.simple.*;
 import sim.portrayal.*;
 import javax.swing.*;
+
+import model.Constants;
+
 import java.awt.Color;
 import java.awt.*;
 
@@ -56,7 +59,7 @@ public class PopulationWithUI extends GUIState
 		Population population = (Population) state;
 		// tell the portrayals what to portray and how to portray them
 		yardPortrayal.setField( population.yard );
-		yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(3)
+		yardPortrayal.setPortrayalForAll(new OvalPortrayal2D(Constants.DOT_SIZE)
 			{
 			public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
 				IndividuAgentMason individu = (IndividuAgentMason)object;
@@ -82,7 +85,7 @@ public class PopulationWithUI extends GUIState
 	{
 		super.init(c);
 		
-		display = new Display2D(600,600,this);
+		display = new Display2D(Constants.WINDOW_SIZE*1.5,Constants.WINDOW_SIZE*1.5,this);
 		display.setClipping(false);
 		
 		displayFrame = display.createFrame();

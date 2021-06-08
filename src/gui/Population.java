@@ -18,7 +18,7 @@ import gui.InstantSimOverview;
 
 
 public class Population extends SimState{
-	public Continuous2D yard = new Continuous2D(1.0,300,300);
+	public Continuous2D yard = new Continuous2D(1.0,Constants.WINDOW_SIZE,Constants.WINDOW_SIZE);
 	double forceToSchoolMultiplier = 0.01;
 	double randomMultiplier = 0.1;
 	//network creation - true is because it is a directed graph
@@ -93,11 +93,19 @@ public class Population extends SimState{
 		for(int i = 1; i <= Constants.NOMBRE_INDIVIDUS; i++)
 		{
 			IndividuAgentMason individu = new IndividuAgentMason(i);
+			int pos1 = 1;
+			int pos2 = 1;
+			if(random.nextBoolean()) {
+				pos1 = -1;
+			}
+			if(random.nextBoolean()) {
+				pos2 = -1;
+			}
 			yard.setObjectLocation(
 				individu,
 				new Double2D(
-						middleX + random.nextDouble() * middleX * 0.5,
-						middleY + random.nextDouble() * middleY * 0.5
+						middleX + random.nextDouble() * middleX * 0.85 * pos1,
+						middleY + random.nextDouble() * middleY * 0.85 * pos2
 				)
 			);
 			buddies.addNode(individu);

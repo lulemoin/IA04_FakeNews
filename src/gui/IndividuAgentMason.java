@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class IndividuAgentMason implements Steppable {
 	boolean believer = false;
+	boolean reached = false;
 	int id;
 	public Population beings;
 	
