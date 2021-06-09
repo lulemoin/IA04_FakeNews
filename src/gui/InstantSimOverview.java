@@ -10,10 +10,6 @@ import model.Constants;
 
 public class InstantSimOverview {	
 	
-	private List<String> IndividuAgents = new ArrayList<String>();
-	private HashMap<String, HashMap<String, Double>> connexions = new HashMap<String, HashMap<String, Double>>();
-	private HashMap<String, Boolean> believerList = new HashMap<String, Boolean>();
-	
 	PropertyChangeSupport ReadFNews = new PropertyChangeSupport(this);
 	PropertyChangeSupport changeConnexions = new PropertyChangeSupport(this); 
 	PropertyChangeSupport changeBelieverList = new PropertyChangeSupport(this); 
@@ -29,33 +25,15 @@ public class InstantSimOverview {
     {
         return instance;
     }
-    
-    //----------------- getters ---------------
-    
-    public List<String> getIndividuAgents() 
-    {
-        return IndividuAgents;
-    }
-    
-    public HashMap<String, Double> getConnexion(String str) 
-    {
-        return connexions.get(str);
-    }
-    
-    public boolean getBeliever(String str) 
-    {
-        return believerList.get(str);
-    }
-    
+
     //Adding something to an attribute
     
     public void changeReadNews(int id, Boolean bool) {
     	fireReadNews(id, bool);
     }
     
-    public void addConnexion(String str, HashMap<String, Double> map) {
-    	connexions.put(str, map);
-    	fireIndividuConnexions(str);
+    public void addConnexion(int id1, int id2, double intensite) {
+    	fireIndividuConnexions( id1,  id2,  intensite);
     }
     
     public void changeBelieverState(int id, Boolean bool) {
@@ -87,8 +65,9 @@ public class InstantSimOverview {
     	ReadFNews.firePropertyChange(Constants.READ_NEWS, null, val); 
 	}
     
-    private void fireIndividuConnexions(String val) { 
-    	changeConnexions.firePropertyChange("List_Increased", null, val); 
+    private void fireIndividuConnexions(int id1, int id2, double intensite) { 
+    	Object[] val = new Object[] {id1,  id2,  intensite};
+    	changeConnexions.firePropertyChange(Constants.NEW_CONNEXION, null, val); 
 	}
     
     private void fireIndividuBelieverList(int id, boolean believeState) { 

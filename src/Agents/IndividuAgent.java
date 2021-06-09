@@ -5,7 +5,7 @@ import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.proto.AchieveREInitiator;
 import java.util.HashMap;
-
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -90,6 +90,9 @@ public class IndividuAgent extends Agent{
 						//connexions_intermediaire = (HashMap<String, String>) msg.getContentObject();
 						System.out.println("connexion inter = " + connexions_intermediaire);
 						System.out.println("connexion = " + connexions);
+						
+						change_connexions_state();
+						
 						/*for (String indiv : connexions_intermediaire.keySet()) {
 							System.out.print(connexions_intermediaire.getClass());
 							//Double intens = Double.valueOf(str);
@@ -281,7 +284,7 @@ public class IndividuAgent extends Agent{
 	
 	private void change_contamination_state(boolean isContamined) {
 		/*
-		 * Change this.contamine to true, and tells simOverview Singleton to fire a proprety change.
+		 * Change this.contamine to bool, and tells simOverview Singleton to fire a proprety change.
 		 */
 		this.contamine = isContamined;
 		simOverview.changeBelieverState(id, this.contamine);
@@ -289,10 +292,34 @@ public class IndividuAgent extends Agent{
 	
 	private void change_readNews_state(boolean bool) {
 		/*
-		 * Change this.contamine to true, and tells simOverview Singleton to fire a proprety change.
+		 * Change this.readNews to bool, and tells simOverview Singleton to fire a proprety change.
 		 */
-		this.contamine = bool;
-		simOverview.changeReadNews(id, this.contamine);
+		this.readNews = bool;
+		simOverview.changeReadNews(id, this.readNews);
+	}
+	
+	private void change_connexions_state() {
+		/*
+		 * tells simOverview Singleton to fire a proprety change on a new connexion
+		 * TODO: implement the function
+		 * how to get the this.id of an agent based on its AID ?
+		 */
+		Iterator<Entry<String, Double>> it = connexions.entrySet().iterator();
+	    while (it.hasNext()) {
+	        HashMap.Entry<String, Double> pair = (HashMap.Entry<String, Double>)it.next();
+	        System.out.println("---------------------------------------------- "+pair.getKey());
+	        it.remove(); // avoids a ConcurrentModificationException
+	        
+	        //TODO get id from pair.getKey()
+	        String[] strFinal = pair.getKey().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+	        int id2 = Integer.parseInt(strFinal[1]) ;
+	        double intensite = pair.getValue();
+	        
+	        simOverview.addConnexion(id, id2 ,intensite);
+	    }
+		
+		
+		
 	}
 	
 }
