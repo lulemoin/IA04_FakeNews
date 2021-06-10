@@ -273,6 +273,7 @@ public class IndividuAgent extends Agent{
 			
 			if (message != null) {
 				change_contamination_state(false);
+				change_readNews_state(false);
 				
 			} else {
 				block();
@@ -307,8 +308,7 @@ public class IndividuAgent extends Agent{
 		Iterator<Entry<String, Double>> it = connexions.entrySet().iterator();
 	    while (it.hasNext()) {
 	        HashMap.Entry<String, Double> pair = (HashMap.Entry<String, Double>)it.next();
-	        System.out.println("---------------------------------------------- "+pair.getKey());
-	        it.remove(); // avoids a ConcurrentModificationException
+	        //it.remove(); // avoids a ConcurrentModificationException
 	        
 	        //TODO get id from pair.getKey()
 	        String[] strFinal = pair.getKey().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
