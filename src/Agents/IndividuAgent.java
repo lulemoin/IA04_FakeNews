@@ -63,6 +63,7 @@ public class IndividuAgent extends Agent{
 		addBehaviour(new SetupConnexionsBehaviour());
 		addBehaviour(new WaitforRequestBehaviour());
 		addBehaviour(new WaitforNewsFromConnexions());
+		addBehaviour(new WaitforEndingNewsBehaviour());
 	}
 	
 	public class subscriptionBehaviour extends OneShotBehaviour {
