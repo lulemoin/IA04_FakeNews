@@ -7,6 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -26,9 +31,13 @@ import jade.proto.AchieveREInitiator;
 import jade.util.leap.Serializable;
 
 import model.Constants;
+import model.CsvFile;
 import model.News;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.Math.*;
 import java.sql.Timestamp;
 
@@ -191,6 +200,17 @@ public class DemandeurAgent extends Agent {
 				
 				News.getInstance().setProfondeur(profondeur);
 				
+				//Envoie csv
+				CsvFile file= CsvFile.getInstance(); 
+				
+				try (FileWriter f = new FileWriter(file.getchemin(), true);
+						BufferedWriter b = new BufferedWriter(f);
+						PrintWriter p = new PrintWriter(b);) {
+					
+					p.println(News.getInstance().getVeracite() + ",  " + News.getInstance().getIntensite() +", " + News.getInstance().getNpartage() +", " + News.getInstance().getNatteints() +", "+ News.getInstance().getProfondeur());
+							
+				} catch (IOException i) {  i.printStackTrace(); }
+
 				
 				News.getInstance().generateNews();
 				
