@@ -74,7 +74,7 @@ public class PopulationWithUI extends GUIState
 			});
 			
 		buddiesPortrayal.setField( new SpatialNetwork2D( population.yard, population.buddies ) );
-		buddiesPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D());
+		buddiesPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D(new Color(210, 210, 210),  null));
 		
 		
 		// reschedule the displayer
