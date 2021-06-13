@@ -141,7 +141,7 @@ public class IndividuAgent extends Agent{
 				System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
 				System.out.println("LA NEWS  intensite = " + news.getIntensite() + " natteints = " + news.getNatteints() + " veracite " +  news.getVeracite());
 
-				System.out.println("connexions = " + connexions); 
+				//System.out.println("connexions = " + connexions); 
 				for (String id : connexions.keySet()) {
 					System.out.println("id = " + id); 
 					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
@@ -191,16 +191,7 @@ public class IndividuAgent extends Agent{
 			News news_transmettre = News.getInstance();
 			double croire;
 			double partage;
-			
-			/*
-			Vr,In,Ec,Dc,Ic  app [0;1]
-					F(Vr, In, np,Ec,Dc,Ic)=coeff *In * coeff(Vr^2)* coeff(1/Ec)* Dc *Ic* coeff*np
-					ou fonction 2 parties : 
-					I believe :
-					f(V,I,Ec)=(coeff *In * coeff(Vr^2)* coeff(1/Ec))^i
-					I share :
-					G(f,np,Dc,Ic)=np/10^i * coeff *Dc* 1[Ic>0,8 et Dc> ?]
-			*/
+		
 			double Vr = news_transmettre.getVeracite();
 			double In = news_transmettre.getIntensite();
 			int Np = news_transmettre.getNpartage();
@@ -209,10 +200,7 @@ public class IndividuAgent extends Agent{
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 						
 			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
-			//croire = news_proche? 2 * croire : croire;
-			
-			
-			
+	
 			if ((news_proche && IntConnexion>0.5) || In>0.7  ) {
 				croire=croire*2;
 			}
@@ -223,10 +211,7 @@ public class IndividuAgent extends Agent{
 			else if(IntConnexion<0.3) {
 				croire=0.5*croire;
 			}
-			
-			
-			//System.out.println("  individu " + getLocalName() +" croire = " + croire);
-						
+				
 			
 			if(croire>0.5) {
 				news_transmettre.incrementeNatteints();

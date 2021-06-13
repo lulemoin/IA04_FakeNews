@@ -109,11 +109,13 @@ public class News {
 
 	public boolean isTimedout() {
 		long now = new Timestamp(System.currentTimeMillis()).getTime(); 
+		/*
 		System.out.println("now " + now );
 		System.out.println("timeLastIndivPartage.getTime() " + timeLastIndivPartage.getTime() );
 		System.out.println("Constants.NEWS_TO_PARTAGE_TIMEOUT = " +  Constants.NEWS_TO_PARTAGE_TIMEOUT);
 		System.out.println("now - timeLastIndivPartage.getTime() = " + (now - timeLastIndivPartage.getTime()) );
 		System.out.println("now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT = " + (boolean) (now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT ));
+		*/
 		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
 	}
 	
@@ -134,16 +136,26 @@ public class News {
 		Random random2 = new Random();
 		System.out.println("Veracite =  " + veracite + "\n");
 		
-	            
+		intensite=random2.nextDouble();    
+		
+		/*
 		if (veracite > 0.7) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
-			 intensite = 0.1 + random2.nextInt(90)/100;
+			 if (a>0.9) { a-=0.1; }
+			 intensite = 0.1 + a;
+			 System.out.println("0.1 = " + a + "\n");
+			 
 		}
 		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
-			 intensite = 0.3 + random2.nextInt(70)/100;
+			if (a>0.7) { a-=0.3; }
+			intensite = 0.3 + a;
+			System.out.println("0.3 = " + a + "\n");
 		}
 		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
-			 intensite = 0.7 + random2.nextInt(30)/100;
+			if (a>0.3) { a-=0.7; }
+			intensite = 0.7 + a;
+			System.out.println("0.7 = " + a + "\n");
 		}
+		*/
 		
 		System.out.println("Intensite = " + intensite + "\n");
 	}
