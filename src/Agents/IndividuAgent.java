@@ -167,7 +167,7 @@ public class IndividuAgent extends Agent{
 			ACLMessage message = receive(mt);
 			if (message != null) {
 				//System.out.println(contamine);
-				if(!contamine) {	
+				if(!contamine && !readNews) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
 				change_readNews_state(true);
