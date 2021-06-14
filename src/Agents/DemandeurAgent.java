@@ -201,15 +201,14 @@ public class DemandeurAgent extends Agent {
 				News.getInstance().setProfondeur(profondeur);
 				
 				//Envoie csv
-//				CsvFile file= CsvFile.getInstance(); 
-//				
-//				try (FileWriter f = new FileWriter(file.getchemin(), true);
-//						BufferedWriter b = new BufferedWriter(f);
-//						PrintWriter p = new PrintWriter(b);) {
-//					
-//					p.println(News.getInstance().getVeracite() + ",  " + News.getInstance().getIntensite() +", " + News.getInstance().getNpartage() +", " + News.getInstance().getNatteints() +", "+ News.getInstance().getProfondeur());
-//							
-//				} catch (IOException i) {  i.printStackTrace(); }
+				CsvFile file= CsvFile.getInstance();			
+				try (FileWriter f = new FileWriter(file.getchemin(), true);
+						BufferedWriter b = new BufferedWriter(f);
+						PrintWriter p = new PrintWriter(b);) {
+					
+					p.println(News.getInstance().getVeracite() + ",  " + News.getInstance().getIntensite() +", " + News.getInstance().getNpartage() +", " + News.getInstance().getNatteints() +", "+ News.getInstance().getProfondeur());
+							
+				} catch (IOException i) {  i.printStackTrace(); }
 
 				
 				News.getInstance().generateNews();

@@ -2,12 +2,12 @@ package model;
 
 public class Constants {
 	public static String DEFAULT_SIMULATION_AGENT = "Sim";
-	public static Integer NOMBRE_INDIVIDUS = 5000;
+	public static Integer NOMBRE_INDIVIDUS = 1000;
 
 	public static String DEFAULT_DEMANDEUR_AGENT = "Demandeur";
 	
-	public static int MOYENNE_NB_CONNEXION = 150*NOMBRE_INDIVIDUS/5000;
-	public static int ECART_TYPE_NB_CONNEXION = 50*NOMBRE_INDIVIDUS/5000;
+	public static int MOYENNE_NB_CONNEXION = 150*NOMBRE_INDIVIDUS/10000;
+	public static int ECART_TYPE_NB_CONNEXION = 50*NOMBRE_INDIVIDUS/10000;
 	
 	public static double MOYENNE_ESPRIT_CRITIQUE = 0.7;
 	public static double ECART_TYPE_ESPRIT_CRITIQUE = 0.5;

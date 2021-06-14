@@ -199,7 +199,7 @@ public class IndividuAgent extends Agent{
 			
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 						
-			croire = In * Vr*Vr*Vr * (1/esprit_critique) * IntConnexion;
+			croire = In * Vr * (1/esprit_critique) * IntConnexion;
 	
 				
 			if ( In>0.8 ) {
@@ -229,7 +229,7 @@ public class IndividuAgent extends Agent{
 				
 			
 			
-			if(croire>0.7) {
+			if(croire>0.75) {
 				news_transmettre.incrementeNatteints();
 			}
 					   
@@ -246,7 +246,7 @@ public class IndividuAgent extends Agent{
 				}
 			
 			
-			if(partage>0.5) {
+			if(partage>0.75) {
 				change_contamination_state(true);
 				news_transmettre.incrementeNpartage();
 				//System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
