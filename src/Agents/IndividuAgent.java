@@ -89,8 +89,8 @@ public class IndividuAgent extends Agent{
 						HashMap<String, Double> connexions_intermediaire = (HashMap<String, Double>) msg.getContentObject();
 						connexions = (HashMap<String, Double>) msg.getContentObject();
 						//connexions_intermediaire = (HashMap<String, String>) msg.getContentObject();
-						System.out.println("connexion inter = " + connexions_intermediaire);
-						System.out.println("connexion = " + connexions);
+						//System.out.println("connexion inter = " + connexions_intermediaire);
+						//System.out.println("connexion = " + connexions);
 						
 						change_connexions_state();
 						
@@ -138,12 +138,12 @@ public class IndividuAgent extends Agent{
 			if (message != null) {
 				News news = News.getInstance();	
 				news.setEmetteurInitial(myAgent.getAID().getLocalName());
-				System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
+				//System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
 				System.out.println("LA NEWS  intensite = " + news.getIntensite() + " natteints = " + news.getNatteints() + " veracite " +  news.getVeracite());
 
 				//System.out.println("connexions = " + connexions); 
 				for (String id : connexions.keySet()) {
-					System.out.println("id = " + id); 
+					//System.out.println("id = " + id); 
 					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
 					partage.addReceiver(new AID(id, AID.ISLOCALNAME));
 					partage.setContent(String.valueOf(connexions.get(id)));
@@ -167,7 +167,7 @@ public class IndividuAgent extends Agent{
 			ACLMessage message = receive(mt);
 			if (message != null) {
 				//System.out.println(contamine);
-				if(!contamine) {	
+				if(!contamine && !readNews) {	
 				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
 				change_readNews_state(true);
@@ -176,7 +176,7 @@ public class IndividuAgent extends Agent{
 				block();
 		}
 	}
-	
+		
 	public class DecisionBehaviour extends WakerBehaviour {
 		ACLMessage message;
 		
@@ -199,21 +199,37 @@ public class IndividuAgent extends Agent{
 			
 			boolean news_proche = message.getSender().getLocalName().equals(news_transmettre.getEmetteurInitial());
 						
-			croire = In * Vr * Vr * (1/esprit_critique) * IntConnexion;
+			croire = In * Vr*Vr*Vr * (1/esprit_critique) * IntConnexion;
 	
-			if ((news_proche && IntConnexion>0.5) || In>0.7  ) {
-				croire=croire*2;
+				
+			if ( In>0.8 ) {
+				croire*=5;
 			}
 			
-			if (IntConnexion>0.7) {
-				croire=5*croire;
+			else if ( In>0.6 ) {
+				croire*=2;
+			}
+			else if ( In<0.3 ) {
+				croire*=0.3;
+			}
+			else if ( In<0.5 ) {
+				croire*=0.5;
+			}
+						
+			if ((news_proche && IntConnexion>0.5)) {
+				croire=croire*5;
+			}
+					
+			else if (IntConnexion>0.7) {
+				croire*=2;
 			}
 			else if(IntConnexion<0.3) {
-				croire=0.5*croire;
+				croire*=0.5;
 			}
 				
 			
-			if(croire>0.5) {
+			
+			if(croire>0.7) {
 				news_transmettre.incrementeNatteints();
 			}
 					   
@@ -234,9 +250,7 @@ public class IndividuAgent extends Agent{
 				change_contamination_state(true);
 				news_transmettre.incrementeNpartage();
 				//System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
-
-				System.out.println(" nbpartage" + News.getInstance().getNpartage());
-				
+	
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);
 					propagate.addReceiver(new AID(id, AID.ISLOCALNAME));					

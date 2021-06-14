@@ -138,24 +138,18 @@ public class News {
 		
 		intensite=random2.nextDouble();    
 		
-		/*
-		if (veracite > 0.7) { //  0.8 < veracite < 1 => 0.3 < intensite < 1
-			 if (a>0.9) { a-=0.1; }
-			 intensite = 0.1 + a;
-			 System.out.println("0.1 = " + a + "\n");
-			 
+		
+		if (veracite > 0.8) { 	 
+			 intensite = 0.1 + random2.nextDouble()*90/100;
 		}
-		else if (veracite > 0.4) { //  0,4 < veracite < 0,8 => 0.5 < intensite < 1
-			if (a>0.7) { a-=0.3; }
-			intensite = 0.3 + a;
-			System.out.println("0.3 = " + a + "\n");
+		
+		else if (veracite > 0.4) { 
+			intensite = 0.5 + random2.nextDouble()*50/100;
 		}
-		else { //  0 < veracite < 0,4 => 0.7 < intensite < 1
-			if (a>0.3) { a-=0.7; }
-			intensite = 0.7 + a;
-			System.out.println("0.7 = " + a + "\n");
+		
+		else { 
+			intensite = 0.7 + random2.nextDouble()*30/100;
 		}
-		*/
 		
 		System.out.println("Intensite = " + intensite + "\n");
 	}
