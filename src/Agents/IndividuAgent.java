@@ -40,8 +40,7 @@ public class IndividuAgent extends Agent{
 	
 	//Double c'est l'intensite de la connexion
 	HashMap<String, Double> connexions = new HashMap<String, Double>();
-	//List<Connexion> connexions = new ArrayList<Connexion>();
-	
+
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
 		
@@ -78,42 +77,18 @@ public class IndividuAgent extends Agent{
 		
 		public void action() {
 			ACLMessage msg = receive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-			if (msg != null) {
-				//System.out.print("Message : " + msg + "\n");
-					//System.out.print(msg.getContentObject() + "\n");
-					//List<AID, Double> connexions = (HashMap<AID, Double>) msg.getContentObject();
-					//String connexions_string = msg.getContent();
-					
+			if (msg != null) {			
 					
 					try {
 						HashMap<String, Double> connexions_intermediaire = (HashMap<String, Double>) msg.getContentObject();
 						connexions = (HashMap<String, Double>) msg.getContentObject();
-						//connexions_intermediaire = (HashMap<String, String>) msg.getContentObject();
-						//System.out.println("connexion inter = " + connexions_intermediaire);
-						//System.out.println("connexion = " + connexions);
 						
 						change_connexions_state();
-						
-						/*for (String indiv : connexions_intermediaire.keySet()) {
-							System.out.print(connexions_intermediaire.getClass());
-							//Double intens = Double.valueOf(str);
-							//connexions.put(indiv, intens);
-						}
-						System.out.print(connexions + "\n");*/
+
 					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					//connexions = HashMap<String, String> connexions_intermediaire;
-					//System.out.print(connexions + "\n");
-					/*System.out.print(connexions_string + "\n");
-					for (HashMap.Entry<AID, String> co : connexions_string.entrySet()) {
-						System.out.print("for...\n");
-						//connexions.put(co.getKey(), Double.valueOf(co.getValue()));
-				    }*/
 				connexions_set = true;
-				//System.out.print("Connections : " + connexions + "\n");
 			}
 			else {
 				block();
@@ -138,12 +113,9 @@ public class IndividuAgent extends Agent{
 			if (message != null) {
 				News news = News.getInstance();	
 				news.setEmetteurInitial(myAgent.getAID().getLocalName());
-				//System.out.println("setEmetteurInitial " + news.getEmetteurInitial());
 				System.out.println("LA NEWS  intensite = " + news.getIntensite() + " natteints = " + news.getNatteints() + " veracite " +  news.getVeracite());
 
-				//System.out.println("connexions = " + connexions); 
 				for (String id : connexions.keySet()) {
-					//System.out.println("id = " + id); 
 					ACLMessage partage = new ACLMessage(ACLMessage.PROPAGATE);
 					partage.addReceiver(new AID(id, AID.ISLOCALNAME));
 					partage.setContent(String.valueOf(connexions.get(id)));
@@ -166,9 +138,8 @@ public class IndividuAgent extends Agent{
 		public void action() {
 			ACLMessage message = receive(mt);
 			if (message != null) {
-				//System.out.println(contamine);
+
 				if(!contamine && !readNews) {	
-				//aSystem.out.println("individu " + getLocalName() + "  news dans le fil d'actu");
 				addBehaviour(new DecisionBehaviour(myAgent, message, Constants.STEP_TIME));
 				change_readNews_state(true);
 				}
@@ -186,8 +157,7 @@ public class IndividuAgent extends Agent{
 		}
 		
 		public void onWake() {
-			
-			//System.out.println("Individu " + getLocalName() + "a recu la news, ses connections :"+ connexions );
+
 			News news_transmettre = News.getInstance();
 			double croire;
 			double partage;
@@ -249,7 +219,6 @@ public class IndividuAgent extends Agent{
 			if(partage>0.75) {
 				change_contamination_state(true);
 				news_transmettre.incrementeNpartage();
-				//System.out.println(" Individu " + getLocalName() +" a choisi de partager = " + partage);
 	
 				for (String id : connexions.keySet()) {
 					ACLMessage propagate = new ACLMessage(ACLMessage.PROPAGATE);

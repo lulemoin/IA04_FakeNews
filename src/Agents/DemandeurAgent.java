@@ -45,13 +45,12 @@ import java.sql.Timestamp;
 public class DemandeurAgent extends Agent {
 	
 	public List<String> IndividuAgents = new ArrayList<String>();
-	//static DemandeurAgent instance;
 	public int done = 0;
 	public News news;
 
 	protected void setup() {
 		System.out.println(getLocalName() + "--> Installed");
-		//addBehaviour(new WaitSubscriptions());
+
 		SequentialBehaviour sequence = new SequentialBehaviour();
 		
 		sequence.addSubBehaviour(new WaitSubscriptions());//nb_individus � passer
@@ -61,17 +60,6 @@ public class DemandeurAgent extends Agent {
 		addBehaviour(sequence);
 		addBehaviour(new waitForNextNews(this, 2000));
 	}
-	
-	
-	//mise en place du design pattern singleton
-	//possibilit� de faire en fait plusieurs instances ? Aurait-ce un int�r�t ?
-//	public static DemandeurAgent getInstance() {
-//		if(instance == null) {
-//			instance = new DemandeurAgent();
-//		}
-//		return instance;
-//	}
-//	
 		
 	//Behaviour d'attente des souscriptions des individus
 	private class WaitSubscriptions extends Behaviour {
@@ -144,9 +132,8 @@ public class DemandeurAgent extends Agent {
 				while (nb_connexions < 1 || nb_connexions >= Constants.NOMBRE_INDIVIDUS) {
 					nb_connexions = (int) Math.round(r.nextGaussian()) * Constants.ECART_TYPE_NB_CONNEXION + Constants.MOYENNE_NB_CONNEXION ;
 				}
-				//HashMap<AID, Double> connexions = new HashMap<AID, Double>();
+
 				HashMap<String, Double> connexions = new HashMap<String, Double>();
-				//Connexions connexions = new Connexions();
 				
 				List<String> RandIndividuAgents = new ArrayList<String>(IndividuAgents);
 				RandIndividuAgents.remove(aid);
@@ -159,11 +146,7 @@ public class DemandeurAgent extends Agent {
 						intensite = r.nextGaussian() * Constants.ECART_TYPE_INTENSITE_CONNEXION + Constants.MOYENNE_INTENSITE_CONNEXION;	
 					connexions.put(nom, intensite);
 				}
-				
-				/*List<String> connexions_string;
-				connexions.forEach((c) -> {
-					connexions_string.add(c.toJSON());
-				});*/ 
+
 				ACLMessage connexions_msg = new ACLMessage(ACLMessage.INFORM);
 				connexions_msg.addReceiver(new AID(aid, AID.ISLOCALNAME));
 				try {
@@ -171,7 +154,6 @@ public class DemandeurAgent extends Agent {
 				}catch (NoClassDefFoundError e) {
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -231,34 +213,5 @@ public class DemandeurAgent extends Agent {
 		
 	}
 }
-
-	
-////doit avoir un oeil sur les fakes news en cours
-//	// des qu'une fake news est finie, il en renvoie une nouvelle ?
-//	private class Manager extends Behaviour {
-//
-//		public void action() {
-//			if(IndividuAgents.size()!=0) {
-//				addBehaviour(new SelectIdReceiver());
-//			}	
-//			
-//			// notification quand la news est finie ou garder une r�f�rence dessus
-//			
-//		}
-//
-//		public boolean done() {
-//			return false;
-//		}
-//		
-//	}
-//	
-//	//quel est le tick ?
-//	// envoyer des messages uniquement quand la liste n'est pas vide
-
-//	private class getProfondeur extends OneShotBehaviour {
-//		String racine=news.getEmetteurInitial();
-//	}
-	
-	
 	
 	

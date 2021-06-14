@@ -24,6 +24,10 @@ public class News {
 	PropertyChangeSupport  changes = new PropertyChangeSupport(this);
 	Boolean newsOver;
 	
+	private final Object monitorN_partage = new Object();
+	private final Object monitorN_atteints = new Object();
+	private final Object monitorTimeLastIndivPartage = new Object();
+	
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		changes.addPropertyChangeListener(propertyName, listener);
 	}
@@ -35,35 +39,37 @@ public class News {
 		startTime = new Timestamp(System.currentTimeMillis());
 	}
 	
-	/*
-	public News(double v, double i, String e) {
-		this.veracite = v;
-		this.intensite = i;
-		this.emetteurInitial = e;
-		this.n_partage=0;
-	}
-	*/
-	
     public static final News getInstance() 
     {
         return instance;
     }
 	
 	public int getNpartage() {
-		return n_partage;
+		synchronized (monitorN_partage) {
+		      return n_partage;
+		    }
 	}
 	
 	public void incrementeNpartage() {
-		this.n_partage+=1;
-		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
+		synchronized (monitorN_partage) {
+			this.n_partage+=1;
+			synchronized (monitorTimeLastIndivPartage) {
+				timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
+			}
+		}
 	}
 	
 	public int getNatteints() {
-		return n_atteints;
+		synchronized (monitorN_atteints) {
+			return n_atteints;
+		}
+		
 	}
 	
 	public void incrementeNatteints() {
-		this.n_atteints+=1;
+		synchronized (monitorN_atteints) {
+			this.n_atteints+=1;
+		}
 	}
 	
 	public double getVeracite() {
@@ -99,7 +105,10 @@ public class News {
 	}
 
 	public Timestamp getTimeLastIndivPartage() {
-		return timeLastIndivPartage;
+		synchronized (monitorTimeLastIndivPartage) {
+			return timeLastIndivPartage;
+		}
+		
 	}
 	
 	public Timestamp getStartTime() {
@@ -108,15 +117,10 @@ public class News {
 	
 
 	public boolean isTimedout() {
-		long now = new Timestamp(System.currentTimeMillis()).getTime(); 
-		/*
-		System.out.println("now " + now );
-		System.out.println("timeLastIndivPartage.getTime() " + timeLastIndivPartage.getTime() );
-		System.out.println("Constants.NEWS_TO_PARTAGE_TIMEOUT = " +  Constants.NEWS_TO_PARTAGE_TIMEOUT);
-		System.out.println("now - timeLastIndivPartage.getTime() = " + (now - timeLastIndivPartage.getTime()) );
-		System.out.println("now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT = " + (boolean) (now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT ));
-		*/
-		return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
+		synchronized (monitorTimeLastIndivPartage) {
+			long now = new Timestamp(System.currentTimeMillis()).getTime(); 
+			return  now - timeLastIndivPartage.getTime() > Constants.NEWS_TO_PARTAGE_TIMEOUT;
+		}
 	}
 	
 	public static void generateNews() {
@@ -124,8 +128,10 @@ public class News {
 		System.out.println("\n LE NOMBRE D ATTEINTS A CET ESSAI EST DE  " + n_atteints);
 		//on réinitialise les parametres
 		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
+		
 		startTime = new Timestamp(System.currentTimeMillis());
 		profondeur = 0;
+		
 		n_partage = 0;
 		n_atteints = 0;
 		
