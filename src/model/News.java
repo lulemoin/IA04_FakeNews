@@ -120,6 +120,8 @@ public class News {
 	}
 	
 	public static void generateNews() {
+		System.out.println("\n LE NOMBRE DE PARTAGE A CET ESSAI EST DE  " + n_partage);
+		System.out.println("\n LE NOMBRE D ATTEINTS A CET ESSAI EST DE  " + n_atteints);
 		//on réinitialise les parametres
 		timeLastIndivPartage = new Timestamp(System.currentTimeMillis());
 		startTime = new Timestamp(System.currentTimeMillis());
